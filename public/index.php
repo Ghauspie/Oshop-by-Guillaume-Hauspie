@@ -50,7 +50,51 @@ $router->map(
     ],
     'main-home'
 );
-
+$router->map(
+    'GET',
+    '/catalogue/categories',
+    [
+        'method' => 'categoryAction',
+        'controller' => '\App\Controllers\CatalogController'
+    ],
+    'catalog-category'
+);
+$router->map(
+    'GET',
+    '/catalogue/produits',
+    [
+        'method' => 'productAction',
+        'controller' => '\App\Controllers\CatalogController'
+    ],
+    'catalog-product'
+);
+$router->map(
+    'GET',
+    '/catalogue/types',
+    [
+        'method' => 'typeAction',
+        'controller' => '\App\Controllers\CatalogController'
+    ],
+    'catalog-type'
+);
+$router->map(
+    'GET',
+    '/catalogue/marques',
+    [
+        'method' => 'brandAction',
+        'controller' => '\App\Controllers\CatalogController'
+    ],
+    'catalog-brand'
+);
+$router->map(
+    'GET',
+    '/catalogue/categories_add',
+    [
+        'method' => 'categoryAddAction',
+        'controller' => '\App\Controllers\CatalogController'
+    ],
+    'catalog-category_add'
+);
 
 /* -------------
 --- DISPATCH ---
