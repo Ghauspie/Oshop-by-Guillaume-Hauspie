@@ -1,7 +1,7 @@
 <div class="container my-4">
         <a href="<?= $router->generate('catalog-category_add') ?>" class="btn btn-success float-right">Ajouter</a>
         <h2>Liste des catégories</h2>
-        <?= dump($viewVars['type_list']) ?>
+        
         <table class="table table-hover mt-4">
             <thead>
                 <tr>
