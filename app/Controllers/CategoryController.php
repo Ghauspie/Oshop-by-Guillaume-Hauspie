@@ -32,14 +32,26 @@ class CategoryController extends CoreController {
      */
     public function add()
     {
+       
         $this->show(
             'category/add-edit',
             [
                 'category' => new Category()
+
             ]
         );
-    }    
-
+    }  
+    //Pour ajouter la nouvelle category
+    public function create()
+    {        
+        $name= $_POST['name'];
+       
+        dump($name);
+        $this->show('category/add-edit',[
+            'category' => new Category()
+        ]);
+    }  
+  
     /**
      * Edition d'une catégorie
      * 

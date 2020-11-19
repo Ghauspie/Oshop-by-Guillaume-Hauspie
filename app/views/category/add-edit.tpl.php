@@ -1,5 +1,8 @@
 <a href="<?= $router->generate('category-list') ?>" class="btn btn-success float-right">Retour</a>
+<?= dump($createCategory);?>
+
 <h2><?php if ($category->getName() === null) : ?>Ajouter<?php else : ?>Modifier<?php endif; ?> une catégorie</h2>
+    
         
         <form action="" method="POST" class="mt-5">
             <div class="form-group">
@@ -21,4 +24,5 @@
                 </small>
             </div>
             <button type="submit" class="btn btn-primary btn-block mt-5">Valider</button>
+            
         </form>

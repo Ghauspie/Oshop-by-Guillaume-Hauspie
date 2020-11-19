@@ -159,13 +159,21 @@ class Category extends CoreModel {
      */
     public function create()
     {
-            // Récupération de l'objet PDO représentant la connexion à la DB
+        if (isset($_POST['submit'])) {
+            $name=$_POST['name'];
+            $subtitle=$_POST['subtitle'];
+            $picture=$_POST['picture'];
+            $post=[$name,$subtitle,$picture];
+        }
+        return $post;
+       
+           /* // Récupération de l'objet PDO représentant la connexion à la DB
             $pdo = Database::getPDO();
 
             // Ecriture de la requête INSERT INTO
             $sql = "
-                INSERT INTO `category` (name, footer_order)
-                VALUES ('{$this->name}', {$this->footer_order})
+                INSERT INTO `category` (name, subtitle, picture)
+                VALUES ('{$name}', {$subtitle},{$picture})
             ";
     
             // Execution de la requête d'insertion (exec, pas query)
@@ -183,6 +191,7 @@ class Category extends CoreModel {
             
             // Si on arrive ici, c'est que quelque chose n'a pas bien fonctionné => FAUX
             return false;
-
+            */
+            
     }
 }

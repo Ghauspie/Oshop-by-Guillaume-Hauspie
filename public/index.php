@@ -105,7 +105,15 @@ $router->map(
     ],
     'category-add'
 );
-
+$router->map(
+    'POST',
+    '/category/add',
+    [
+        'method' => 'create',
+        'controller' => '\App\Controllers\CategoryController'
+    ],
+    'category-add-create'
+);
 
 
 // Edition d'une catégorie
