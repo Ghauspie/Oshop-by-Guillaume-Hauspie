@@ -3,3 +3,4 @@ vendor
 
 # Fichier de config
 app/config.ini
+import-external-repo.sh
