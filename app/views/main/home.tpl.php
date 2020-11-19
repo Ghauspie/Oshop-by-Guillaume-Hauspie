@@ -1,5 +1,4 @@
-
-        <p class="display-4">
+<p class="display-4">
             Bienvenue dans le backOffice <strong>Dans les shoe</strong>...
         </p>
 
@@ -17,10 +16,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            <?php foreach ($viewVars['category_list'] as $categoryValue): ?> 
+                            <?php foreach($categories as $category) : ?>
                                 <tr>
-                                    <th scope="row"><?= $categoryValue->getID() ?></th>
-                                    <td><?= $categoryValue->getName() ?></td>
+                                    <th scope="row"><?= $category->getHomeOrder() ?></th>
+                                    <td><?= $category->getName() ?></td>
                                     <td class="text-right">
                                         <a href="" class="btn btn-sm btn-warning">
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
@@ -38,7 +37,7 @@
                                         </div>
                                     </td>
                                 </tr>
-<?php endforeach ?>
+                            <?php endforeach; ?>
                             </tbody>
                         </table>
                         <a href="categories.html" class="btn btn-block btn-success">Voir plus</a>
@@ -58,10 +57,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            <?php foreach ($viewVars['product_list'] as $categoryValue): ?> 
+                                <?php foreach($products as $product) : ?>
                                 <tr>
-                                    <th scope="row"><?= $categoryValue->getID() ?></th>
-                                    <td><?= $categoryValue->getName() ?></td>
+                                    <th scope="row"><?= $product->getId() ?></th>
+                                    <td><?= $product->getName() ?></td>
                                     <td class="text-right">
                                         <a href="" class="btn btn-sm btn-warning">
                                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
@@ -79,7 +78,7 @@
                                         </div>
                                     </td>
                                 </tr>
-                               <?php endforeach ?>
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
                         <a href="products.html" class="btn btn-block btn-success">Voir plus</a>
@@ -87,4 +86,3 @@
                 </div>
             </div>
         </div>
- 

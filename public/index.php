@@ -50,65 +50,73 @@ $router->map(
     ],
     'main-home'
 );
-// Liste categories
+
+// Liste des produits
 $router->map(
     'GET',
-    '/catalogue/categories',
+    '/product/list',
     [
-        'method' => 'categoryAction',
-        'controller' => '\App\Controllers\CatalogController'
+        'method' => 'list',
+        'controller' => '\App\Controllers\ProductController'
     ],
-    'catalog-category'
+    'product-list'
 );
-// Liste produits
+
+// Ajout produit
 $router->map(
     'GET',
-    '/catalogue/produits',
+    '/product/add',
     [
-        'method' => 'productAction',
-        'controller' => '\App\Controllers\CatalogController'
+        'method' => 'add',
+        'controller' => '\App\Controllers\ProductController'
     ],
-    'catalog-product'
+    'product-add'
 );
-// Liste type
+
+// Edition d'un produit
 $router->map(
     'GET',
-    '/catalogue/types',
+    '/product/[i:id]/edit',
     [
-        'method' => 'typeAction',
-        'controller' => '\App\Controllers\CatalogController'
+        'method' => 'update',
+        'controller' => '\App\Controllers\ProductController'
     ],
-    'catalog-type'
+    'product-update'
 );
-// Liste marques
+
+// Liste des catégories
 $router->map(
     'GET',
-    '/catalogue/marques',
+    '/category/list',
     [
-        'method' => 'brandAction',
-        'controller' => '\App\Controllers\CatalogController'
+        'method' => 'list',
+        'controller' => '\App\Controllers\CategoryController'
     ],
-    'catalog-brand'
+    'category-list'
 );
-// ajout categories
+
+// Ajout catégorie
 $router->map(
     'GET',
-    '/catalogue/categories_add',
+    '/category/add',
     [
-        'method' => 'categoryAddAction',
-        'controller' => '\App\Controllers\CatalogController'
+        'method' => 'add',
+        'controller' => '\App\Controllers\CategoryController'
     ],
-    'catalog-category_add'
+    'category-add'
 );
-// Liste produit
+
+
+
+// Edition d'une catégorie
 $router->map(
     'GET',
-    '/catalogue/produit_add',
+    '/category/[i:id]/edit',
     [
-        'method' => 'produitAddAction',
-        'controller' => '\App\Controllers\CatalogController'
+        'method' => 'update',
+        'controller' => '\App\Controllers\CategoryController'
     ],
-    'catalog-produit_add'
+    'category-update'
 );
 
 /* -------------

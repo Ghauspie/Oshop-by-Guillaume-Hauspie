@@ -14,39 +14,39 @@ class Product extends CoreModel {
     /**
      * @var string
      */
-    protected $name;
+    private $name;
     /**
      * @var string
      */
-    protected $description;
+    private $description;
     /**
      * @var string
      */
-    protected $picture;
+    private $picture;
     /**
      * @var float
      */
-    protected $price;
+    private $price;
     /**
      * @var int
      */
-    protected $rate;
+    private $rate;
     /**
      * @var int
      */
-    protected $status;
+    private $status;
     /**
      * @var int
      */
-    protected $brand_id;
+    private $brand_id;
     /**
      * @var int
      */
-    protected $category_id;
+    private $category_id;
     /**
      * @var int
      */
-    protected $type_id;
+    private $type_id;
     
     /**
      * Méthode permettant de récupérer un enregistrement de la table Product en fonction d'un id donné
@@ -76,20 +76,6 @@ class Product extends CoreModel {
         
         return $result;
     }
-    public function findAllHomepage()
-    {
-        $pdo = Database::getPDO();
-        $sql = '
-            SELECT *
-            FROM product
-          ORDER BY id DESC
-          LIMIT 4
-        ';
-        $pdoStatement = $pdo->query($sql);
-        $productList = $pdoStatement->fetchAll(PDO::FETCH_CLASS, self::class);
-        
-        return $productList;
-    }
 
     /**
      * Méthode permettant de récupérer tous les enregistrements de la table product
@@ -99,45 +85,11 @@ class Product extends CoreModel {
     public function findAll()
     {
         $pdo = Database::getPDO();
-        $sql = 'SELECT product.*, `type`.`name` As `name_type`,`brand`.`name` As `brand_name`,`category`.`name` As `category_name`   FROM `product`
-        inner join `type` ON  `product`.`type_id`=`type`.`id`
-        inner join `brand` ON  `product`.`brand_id`=`brand`.`id`
-        left join `category` ON  `product`.`category_id`=`category`.`id`
-        order by `product`.`id`
-        ';
+        $sql = 'SELECT * FROM `product`';
         $pdoStatement = $pdo->query($sql);
-        $results = $pdoStatement->fetchAll(PDO::FETCH_ASSOC);
+        $results = $pdoStatement->fetchAll(PDO::FETCH_CLASS, 'App\Models\Product');
         
         return $results;
-    }
-
-    public function insert()
-    {
-        // Récupération de l'objet PDO représentant la connexion à la DB
-        $pdo = Database::getPDO();
-
-        // Ecriture de la requête INSERT INTO
-        $sql = "
-            INSERT INTO `product` (name,description,picture,price, rate, status, brand_id, category_id, type_id)
-            VALUES ('{$this->name}',{$this->description}, {$this->picture}, {$this->price}, {$this->rate}, {$this->status}, {$this->brand_id}, {$this->category_id},{$this->type_id})
-        ";
-
-        // Execution de la requête d'insertion (exec, pas query)
-        $insertedRows = $pdo->exec($sql);
-
-        // Si au moins une ligne ajoutée
-        if ($insertedRows > 0) {
-            // Alors on récupère l'id auto-incrémenté généré par MySQL
-            // est une fonction de PDO lastInsertId()
-            $this->id = $pdo->lastInsertId();
-
-            // On retourne VRAI car l'ajout a parfaitement fonctionné
-            return true;
-            // => l'interpréteur PHP sort de cette fonction car on a retourné une donnée
-        }
-        
-        // Si on arrive ici, c'est que quelque chose n'a pas bien fonctionné => FAUX
-        return false;
     }
 
     /**
@@ -318,5 +270,25 @@ class Product extends CoreModel {
     public function setTypeId(int $type_id)
     {
         $this->type_id = $type_id;
+    }
+
+    /**
+     * Récupérer les 3 produits mis en avant sur la home
+     * 
+     * @return Product[]
+     */
+    public static function findAllHomepage()
+    {
+        $pdo = Database::getPDO();
+        $sql = '
+            SELECT *
+            FROM product
+            ORDER BY id DESC
+            LIMIT 3
+        ';
+        $pdoStatement = $pdo->query($sql);
+        $products = $pdoStatement->fetchAll(PDO::FETCH_CLASS, self::class);
+        
+        return $products;
     }
 }
