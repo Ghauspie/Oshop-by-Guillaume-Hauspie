@@ -1,4 +1,4 @@
-<div class="container my-4">
+
         <p class="display-4">
             Bienvenue dans le backOffice <strong>Dans les shoe</strong>...
         </p>
@@ -87,4 +87,4 @@
                 </div>
             </div>
         </div>
-    </div>
+ 

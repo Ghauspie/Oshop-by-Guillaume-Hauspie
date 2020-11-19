@@ -1,4 +1,4 @@
-<div class="container my-4">
+
         <a href="product_add.html" class="btn btn-success float-right">Ajouter</a>
         
         <h2>Liste des produits</h2>
@@ -24,7 +24,7 @@
                     <th scope="row"><?= $productValue['id'] ?></th>
                     <td><?= $productValue['name'] ?></td>
                     <td><?= $productValue['description'] ?><r</td>
-                    <td><img src="/assets/images/<?= $productValue['picture'] ?>" alt="<?= $productValue['picture'] ?>"></td>
+                    <td><img src="./<?= $productValue['picture'] ?>" alt="<?= $productValue['picture'] ?>"></td>
                     <td><?= $productValue['price']?></td>
                     <td><?= $productValue['rate']?></td>
                     <td><?= $productValue['status']?></td>
@@ -52,4 +52,4 @@
                <?php endforeach ?>
             </tbody>
         </table>
-    </div>
+   

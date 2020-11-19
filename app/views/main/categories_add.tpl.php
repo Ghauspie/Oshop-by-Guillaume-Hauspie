@@ -1,4 +1,4 @@
-<div class="container my-4">
+
         <a href="<?= $router->generate('catalog-category') ?>" class="btn btn-success float-right">Retour</a>
         <h2>Ajouter une catégorie</h2>
         
@@ -23,4 +23,4 @@
             </div>
             <button type="submit" class="btn btn-primary btn-block mt-5">Valider</button>
         </form>
-    </div>
+  

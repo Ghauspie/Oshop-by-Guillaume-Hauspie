@@ -50,6 +50,7 @@ $router->map(
     ],
     'main-home'
 );
+// Liste categories
 $router->map(
     'GET',
     '/catalogue/categories',
@@ -59,6 +60,7 @@ $router->map(
     ],
     'catalog-category'
 );
+// Liste produits
 $router->map(
     'GET',
     '/catalogue/produits',
@@ -68,6 +70,7 @@ $router->map(
     ],
     'catalog-product'
 );
+// Liste type
 $router->map(
     'GET',
     '/catalogue/types',
@@ -77,6 +80,7 @@ $router->map(
     ],
     'catalog-type'
 );
+// Liste marques
 $router->map(
     'GET',
     '/catalogue/marques',
@@ -86,6 +90,7 @@ $router->map(
     ],
     'catalog-brand'
 );
+// ajout categories
 $router->map(
     'GET',
     '/catalogue/categories_add',
@@ -94,6 +99,16 @@ $router->map(
         'controller' => '\App\Controllers\CatalogController'
     ],
     'catalog-category_add'
+);
+// Liste produit
+$router->map(
+    'GET',
+    '/catalogue/produit_add',
+    [
+        'method' => 'produitAddAction',
+        'controller' => '\App\Controllers\CatalogController'
+    ],
+    'catalog-produit_add'
 );
 
 /* -------------
