@@ -82,8 +82,8 @@ class Product extends CoreModel {
         $sql = '
             SELECT *
             FROM product
-          ORDER BY id ASC
-          LIMIT 3
+          ORDER BY id DESC
+          LIMIT 4
         ';
         $pdoStatement = $pdo->query($sql);
         $productList = $pdoStatement->fetchAll(PDO::FETCH_CLASS, self::class);
