@@ -43,12 +43,12 @@ class CategoryController extends CoreController {
     }  
     //Pour ajouter la nouvelle category
     public function create()
-    {        
-        $name= $_POST['name'];
-       
-        dump($name);
+    {  
+        $test=new Category;
+        $testcreate=$test->createCategory();
         $this->show('category/add-edit',[
-            'category' => new Category()
+            'category' => new Category(),
+            'category_create'=> $testcreate
         ]);
     }  
   
