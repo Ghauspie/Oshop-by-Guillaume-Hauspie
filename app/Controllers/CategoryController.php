@@ -32,77 +32,14 @@ class CategoryController extends CoreController {
      */
     public function add()
     {
-       
         $this->show(
             'category/add-edit',
             [
                 'category' => new Category()
             ]
         );
-    }  
-    //Pour ajouter la nouvelle category
-    public function create()
-    {  
-        dump($_POST);
-        $name=filter_input(INPUT_POST,'name',FILTER_SANITIZE_STRING);
-        $subtitle=filter_input(INPUT_POST,'subtitle',FILTER_SANITIZE_STRING);
-        $picture=filter_input(INPUT_POST,'picture',FILTER_VALIDATE_URL);
-        
+    }    
 
-         // var_dump($name, $description, $picture);
-
-        // On valide nos données (et oui, c'est important de le faire aussi côté serveur)
-
-        // on prépare un array qui va contenir nos erreurs
-        $errorsList = [];
-
-        // si le champ name est vide, on alimente l'array d'erreurs
-        if (empty($name)) {
-            $errorsList[] = 'Le nom est vide';
-        }
-
-        if (empty($subtitle)) {
-            $errorsList[] = 'La description est vide';
-        }
-        if ($picture === false) {
-            $errorsList[] = 'L\'URL de l\'image est invalide';
-        }
-        //echo $name_db;
-        //var_dump($errorsList);
-           // Je n'ai aucune erreur, OK, GO BDD
-           if (empty($errorsList)) {
-            echo 'On y va, on enregistre les données en BDD';
-
-            // On instancie un nouveau modèle de type  Category
-            $category = new Category();
-            // Pour le moment il est vide
-            //var_dump($category);
-
-            // On met à jour les propriétés de l'instance (grace aux setters)
-            $category->setName($name);
-            $category->setSubtitle($subtitle);
-            $category->setPicture($picture);
-
-            // mon objet est "rempli"
-            // On appelle la méthode qui permet d'insérer les données en BDD
-            $category->insert();
-            // si insert() return true, tout s'est bien passé (enregistre)
-            if($category->insert()) {
-                header('Location: /category/list');
-                exit;
-            }
-            else {
-                echo 'KO, souci avec ajout en BDD';
-            }
-
-        }
-
-        // oups ! j'ai des erreurs dans mon array...
-        else {
-            echo 'Coco ! t\'as des erreurs';        }
-        
-    }  
-  
     /**
      * Edition d'une catégorie
      * 
@@ -122,5 +59,86 @@ class CategoryController extends CoreController {
             ]
         );
     }
-    
+
+    /**
+     * POST Création d'une catégorie.
+     *
+     * @return void
+     */
+    public function create()
+    {
+        // On tente de récupèrer les données venant du formulaire.
+        $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $subtitle = filter_input(INPUT_POST, 'subtitle', FILTER_SANITIZE_STRING);
+        $picture = filter_input(INPUT_POST, 'picture', FILTER_VALIDATE_URL);
+
+        // On vérifie l'existence et la validité de ces données (gestion d'erreur).
+        $errorList = [];
+
+        // Pour le "name", faut vérifier si la chaîne est présente *et* si elle
+        // a passé le filtre de validation.
+        if (empty($name)) {
+            $errorList[] = 'Le nom est vide';
+        }
+        if ($name === false) {
+            $errorList[] = 'Le nom est invalide';
+        }
+        // Pareil pour le "subtitle".
+        if (empty($subtitle)) {
+            $errorList[] = 'Le sous-titre est vide';
+        }
+        if ($subtitle === false) {
+            $errorList[] = 'Le sous-titre est invalide';
+        }
+        // Pour l'URL de l'image "picture", le filtre vérifie forcément sa présence aussi.
+        if ($picture === false) {
+            $errorList[] = 'L\'URL d\'image est invalide';
+        }
+
+        // S'il n'y a aucune erreur dans les données...
+        if (empty($errorList)) {
+            // On instancie un nouveau modèle de type Category.
+            $category = new Category();
+
+            // On met à jour les propriétés de l'instance.
+            $category->setName($name);
+            $category->setSubtitle($subtitle);
+            $category->setPicture($picture);
+
+            // On tente de sauvegarder les données en DB...
+            if ($category->insert()) {
+                // Si la sauvegarde a fonctionné, on redirige vers la liste des catégories.
+                header('Location: /category/list');
+                exit;
+            }
+            else {
+                // Sinon, on ajoute un message d'erreur à la page actuelle, et on laisse
+                // l'utilisateur retenter la création.
+                $errorList[] = 'La sauvegarde a échoué';
+            }
+        }
+
+        // S'il y a une ou de(s) erreur(s) dans les données...
+        else {
+            // On réaffiche le formulaire, mais pré-rempli avec les (mauvaises) données
+            // proposées par l'utilisateur.
+            // Pour ce faire, on instancie un modèle Category, qu'on passe au template.
+
+            $category = new Category();
+            $category->setName(filter_input(INPUT_POST, 'name'));
+            $category->setSubtitle(filter_input(INPUT_POST, 'subtitle'));
+            $category->setPicture(filter_input(INPUT_POST, 'picture'));
+
+            $this->show(
+                'category/add-edit',
+                [
+                    // On pré-remplit les inputs avec les données BRUTES initialement
+                    // reçues en POST, qui sont actuellement stockées dans le modèle.
+                    'category' => $category,
+                    // On transmet aussi le tableau d'erreurs, pour avertir l'utilisateur.
+                    'errorList' => $errorList
+                ]
+            );
+        }
+    }
 }
