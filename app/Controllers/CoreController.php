@@ -12,6 +12,7 @@ class CoreController {
      */
     protected function show(string $viewName, $viewVars = []) {
         // On globalise $router car on ne sait pas faire mieux pour l'instant
+        // De cette manière, on a accès à $router dans les vues (car on a modifié sa portée)
         global $router;
 
         // Comme $viewVars est déclarée comme paramètre de la méthode show()
@@ -21,7 +22,7 @@ class CoreController {
         $viewVars['currentPage'] = $viewName; 
 
         // définir l'url absolue pour nos assets
-        $viewVars['assetsBaseUri'] = $_SERVER['BASE_URI'] . 'assets/';
+        $viewVars['assetsBaseUri'] = $_SERVER['BASE_URI'] . '/assets/';
         // définir l'url absolue pour la racine du site
         // /!\ != racine projet, ici on parle du répertoire public/
         $viewVars['baseUri'] = $_SERVER['BASE_URI'];
@@ -29,6 +30,8 @@ class CoreController {
         // On veut désormais accéder aux données de $viewVars, mais sans accéder au tableau
         // La fonction extract permet de créer une variable pour chaque élément du tableau passé en argument
         extract($viewVars);
+        // var_dump($viewVars);
+        // var_dump($baseUri);
         // => la variable $currentPage existe désormais, et sa valeur est $viewName
         // => la variable $assetsBaseUri existe désormais, et sa valeur est $_SERVER['BASE_URI'] . '/assets/'
         // => la variable $baseUri existe désormais, et sa valeur est $_SERVER['BASE_URI']

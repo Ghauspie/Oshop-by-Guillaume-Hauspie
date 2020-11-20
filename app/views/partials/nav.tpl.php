@@ -12,22 +12,22 @@
                         <a class="nav-link" href="<?= $router->generate('main-home') ?>">Accueil <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= $router->generate('catalog-category') ?>">Catégories</a>
+                        <a class="nav-link" href="<?= $router->generate('category-list') ?>">Catégories</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= $router->generate('catalog-product') ?>">Produits</a>
+                        <a class="nav-link" href="<?= $router->generate('product-list') ?>">Produits</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= $router->generate('catalog-type') ?>">Types</a>
+                        <a class="nav-link" href="#">Types</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= $router->generate('catalog-brand') ?>">Marques</a>
+                        <a class="nav-link" href="#">Marques</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= $router->generate('catalog-brand') ?>">Tags</a>
+                        <a class="nav-link" href="#">Tags</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= $router->generate('catalog-brand') ?>">Sélections Accueil &amp; Footer</a>
+                        <a class="nav-link" href="#">Sélections Accueil &amp; Footer</a>
                     </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0">

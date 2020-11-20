@@ -1,5 +1,5 @@
-
-        <a href="<?= $router->generate('catalog-category_add') ?>" class="btn btn-success float-right">Ajouter</a>
+<?php //var_dump($products); ?>
+<a href="<?= $router->generate('category-add') ?>" class="btn btn-success float-right">Ajouter</a>
         <h2>Liste des catégories</h2>
         <table class="table table-hover mt-4">
             <thead>
@@ -7,19 +7,17 @@
                     <th scope="col">#</th>
                     <th scope="col">Nom</th>
                     <th scope="col">Sous-titre</th>
-                    <th scope="col">home order </th>
                     <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($viewVars['category_list'] as $categoryValue): ?>   
+                <?php foreach ($categories as $category) : ?>
                 <tr>
-                    <th scope="row"><?= $categoryValue->getID() ?></th>
-                    <td><?= $categoryValue->getName() ?></td>
-                    <td><?= $categoryValue->getSubtitle() ?></td>
-                    <td><?= $categoryValue->getHomeOrder() ?></td>
+                    <th scope="row"><?= $category->getId(); ?></th>
+                    <td><?= $category->getName(); ?></td>
+                    <td><?= $category->getSubTitle(); ?></td>
                     <td class="text-right">
-                        <a href="" class="btn btn-sm btn-warning">
+                        <a href="<?= $router->generate('category-update', ['id' => $category->getId()]) ?>" class="btn btn-sm btn-warning">
                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                         </a>
                         <!-- Example single danger button -->
@@ -35,6 +33,6 @@
                         </div>
                     </td>
                 </tr>
-            <?php endforeach ?>
+                <?php endforeach; ?>
             </tbody>
         </table>
