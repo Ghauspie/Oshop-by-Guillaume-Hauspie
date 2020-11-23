@@ -115,7 +115,6 @@ $router->map(
     'category-add-create'
 );
 
-
 // Edition d'une catégorie
 $router->map(
     'GET',
@@ -125,6 +124,16 @@ $router->map(
         'controller' => '\App\Controllers\CategoryController'
     ],
     'category-update'
+);
+// Edition d'une catégorie
+$router->map(
+    'POST',
+    '/category/[i:id]/edit',
+    [
+        'method' => 'updateBDD',
+        'controller' => '\App\Controllers\CategoryController'
+    ],
+    'category-updateBDD'
 );
 
 // Création produit

@@ -5,13 +5,14 @@
 
 <a href="<?= $router->generate('category-list') ?>" class="btn btn-success float-right">Retour</a>
 <h2><?php if ($category->getName() === null) : ?>Ajouter<?php else : ?>Modifier<?php endif; ?> une catégorie</h2>
-    <?php dump($_POST)?>
+       
     
         <form action="" method="POST" class="mt-5">
             <div class="form-group">
                 <label for="name">Nom</label>
                 <input type="text" class="form-control" id="name" name="name" placeholder="Nom de la catégorie" value="<?= $category->getName(); ?>">
-                
+                <input type="hidden" id="id" name="id" value="<?= $category->getID(); ?>">
+ 
             </div>
             <div class="form-group">
                 <label for="subtitle">Sous-titre</label>
@@ -27,6 +28,7 @@
                     URL relative d'une image (jpg, gif, svg ou png) fournie sur <a href="https://benoclock.github.io/S06-images/" target="_blank">cette page</a>
                 </small>
             </div>
+         
             <button type="submit" class="btn btn-primary btn-block mt-5">Valider</button>
         </form>
 

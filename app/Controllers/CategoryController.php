@@ -110,8 +110,7 @@ class CategoryController extends CoreController {
                 // Si la sauvegarde a fonctionné, on redirige vers la liste des catégories.
                 header('Location: /category/list');
                 exit;
-            }
-            else {
+            } else {
                 // Sinon, on ajoute un message d'erreur à la page actuelle, et on laisse
                 // l'utilisateur retenter la création.
                 $errorList[] = 'La sauvegarde a échoué';
@@ -140,5 +139,42 @@ class CategoryController extends CoreController {
                 ]
             );
         }
+    }
+    /**
+     * POST Création d'une catégorie.
+     *
+     * @return void
+     */
+    public function updateBDD(){
+        // On uttilse global $router car on à stocké la racine du site dedans
+        global $router;
+         // On tente de récupèrer les données venant du formulaire.
+         $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+         $subtitle = filter_input(INPUT_POST, 'subtitle', FILTER_SANITIZE_STRING);
+         $picture = filter_input(INPUT_POST, 'picture', FILTER_VALIDATE_URL);
+         $id=filter_input(INPUT_POST, 'id');
+
+     // On instancie un nouveau modèle de type Category.
+     $category = new Category();
+ 
+    // On met à jour les propriétés de l'instance.
+    $category->setName($name);
+    $category->setSubtitle($subtitle);
+    $category->setPicture($picture);
+    $category->setId($id);
+
+ 
+             // On tente de sauvegarder les données en DB...
+             if ($category->update()=== true) 
+             {
+                 // Si la sauvegarde a fonctionné, on redirige vers la liste des catégories.
+                 header('Location: /category/list');
+                 exit;
+             }
+             else {
+                 // Sinon, on ajoute un message d'erreur à la page actuelle, et on laisse
+                 // l'utilisateur retenter la création.
+                 echo 'La sauvegarde a échoué';
+                   }
     }
 }
