@@ -4,7 +4,7 @@ namespace App\Models;
 
 // Classe mère de tous les Models
 // On centralise ici toutes les propriétés et méthodes utiles pour TOUS les Models
-class CoreModel {
+abstract class CoreModel {
     /**
      * @var int
      */
@@ -28,6 +28,7 @@ class CoreModel {
     {
         return $this->id;
     }
+
     /**
      * Get the value of created_at
      *
@@ -48,19 +49,10 @@ class CoreModel {
         return $this->updated_at;
     }
 
-
-
-    /**
-     * Set the value of id
-     *
-     * @param  int  $id
-     *
-     * @return  self
-     */ 
-    public function setId(int $id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
+    // on peut contraindre les classes filles de CoreModel à déclarer les méthodes pour le CRUD
+    abstract static public function findAll();
+    abstract public function insert(); // CREATE
+    abstract static public function find($id); // READ
+    abstract public function update(); // UPDATE
+    abstract public function delete(); // DELETE
 }

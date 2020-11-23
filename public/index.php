@@ -78,10 +78,10 @@ $router->map(
     'GET',
     '/product/[i:id]/edit',
     [
-        'method' => 'update',
+        'method' => 'edit',
         'controller' => '\App\Controllers\ProductController'
     ],
-    'product-update'
+    'product-edit'
 );
 
 // Liste des catégories
@@ -107,12 +107,12 @@ $router->map(
 );
 $router->map(
     'POST',
-    '/category/add',
+    '/product/add',
     [
         'method' => 'create',
-        'controller' => '\App\Controllers\CategoryController'
+        'controller' => '\App\Controllers\ProductController'
     ],
-    'category-add-create'
+    'product-create'
 );
 
 // Edition d'une catégorie
@@ -136,17 +136,60 @@ $router->map(
     'category-updateBDD'
 );
 
-// Création produit
+//Suppression d'une catégorie
 $router->map(
-    'POST',
-    '/product/add',
+    'GET',
+    '/category/[i:id]/delete',
     [
-        'method' => 'create',
-        'controller' => '\App\Controllers\ProductController'
+        'method' => 'delete',
+        'controller' => '\App\Controllers\CategoryController'
     ],
-    'product-create'
+    'category-delete'
 );
 
+
+//creation d'une categori
+$router->map(
+    'POST',
+    '/category/add',
+    [
+        'method' => 'create',
+        'controller' => '\App\Controllers\CategoryController'
+    ],
+    'category-create'
+);
+
+// Edition d'un produit
+$router->map(
+    'POST',
+    '/product/[i:id]/edit',
+    [
+        'method' => 'update',
+        'controller' => '\App\Controllers\ProductController'
+    ],
+    'product-update'
+);
+
+//Page login 
+$router->map(
+    'GET',
+    '/login',
+    [
+        'method' => 'login',
+        'controller' => '\App\Controllers\LoginController'
+    ],
+    'main-login'
+);
+//connected login
+$router->map(
+    'POST',
+    '/login',
+    [
+        'method' => 'connected',
+        'controller' => '\App\Controllers\LoginController'
+    ],
+    'main-login-connected'
+);
 
 /* -------------
 --- DISPATCH ---

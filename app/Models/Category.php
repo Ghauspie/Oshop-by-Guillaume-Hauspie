@@ -98,7 +98,7 @@ class Category extends CoreModel {
      * @param int $categoryId ID de la catégorie
      * @return Category
      */
-    public function find($categoryId)
+    public static function find($categoryId)
     {
         // se connecter à la BDD
         $pdo = Database::getPDO();
@@ -121,7 +121,7 @@ class Category extends CoreModel {
      * 
      * @return Category[]
      */
-    public function findAll()
+    public static function findAll()
     {
         $pdo = Database::getPDO();
         $sql = 'SELECT * FROM `category`';
@@ -202,31 +202,49 @@ class Category extends CoreModel {
     //on créer la function pour faire les modification d'une category
     public function update()
     {
+        // Récupération de l'objet PDO représentant la connexion à la DB
+        $pdo = Database::getPDO();
 
-         // Récupération de l'objet PDO représentant la connexion à la DB
-         $pdo = Database::getPDO();
+        // Ecriture de la requête UPDATE
+        $sql = $pdo->prepare("
+            UPDATE `category`
+            SET
+                name = :name,
+                subtitle = :subtitle,
+                picture = :picture,
+                updated_at = NOW()
+            WHERE id = :id
+        ");
+
+        //$pdoStatement = $pdo->prepare($sql);
+
+        // on utilise bindValue et pas simplement un array
+        // avantage : on peut contraindre les types de données
+        $sql->bindValue(':id', $this->id, PDO::PARAM_INT);
+        $sql->bindValue(':name', $this->name, PDO::PARAM_STR);
+        $sql->bindValue(':subtitle', $this->subtitle, PDO::PARAM_STR);
+        $sql->bindValue(':picture', $this->picture, PDO::PARAM_STR);
+
+        // Execution de la requête de mise à jour
+       return $sql->execute();
+    }
+
+     /**
+     * Méthode de supression d'une catégorie 
+     *
+     * @return bool Retourne 'True' si la catégorie a bien été supprimée
+     */
+    public function delete(){
+        $pdo= Database::getPDO();
+    
+        $sql= "DELETE FROM `category` WHERE id =:id";
+
+        $pdoStatement =$pdo->prepare($sql);
+
+        $pdoStatement->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+        $pdoStatement->execute();
         
- 
-         // Ecriture de la requête UPDATE
-         $sql =$pdo->prepare( "
-             UPDATE `category`
-             SET
-                 name = ':name',
-                 subtitle = ':subtitle',
-                 picture =':picture',
-                 updated_at = NOW()
-             WHERE `id`=  ':id'"
-         );
-       
-           $sql->bindValue('name',$this->name,PDO::PARAM_STR);
-         $sql->bindValue('subtitle',$this->subtitle,PDO::PARAM_STR);
-         $sql->bindValue('picture',$this->picture,PDO::PARAM_STR);
-         $sql->bindParam('id',$this->id,PDO::PARAM_INT);
-         
-         //dump($this->id,$this->subtitle);
-         
-         // On retourne VRAI, si au moins une ligne ajoutée
-         return $sql->execute();
-
+        return ($pdoStatement->rowCount()>0);
     }
 }

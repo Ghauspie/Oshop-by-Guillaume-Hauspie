@@ -29,6 +29,19 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Sélections Accueil &amp; Footer</a>
                     </li>
+                    <?php
+        // si un user est connecté
+        if (!empty($_SESSION['connectedUser'])) : 
+        ?>
+            <li class="nav-item"><p><?= $username ?></p>
+            <a href="#">Deconnexion</a>
+        </li>
+        <?php else : // sinon ?>
+            <li class="nav-item">
+                        <a class="nav-link" href="<?= $router->generate('main-login') ?>">Login</a>
+                    </li>
+
+        <?php endif; ?>
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
                     <input class="form-control mr-sm-2" type="search" placeholder="Rechercher" aria-label="Rechercher">

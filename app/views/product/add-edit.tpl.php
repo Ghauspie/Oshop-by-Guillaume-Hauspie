@@ -1,4 +1,4 @@
-<?php var_dump($product->getName()); ?>
+<?php //var_dump($product->getName()); ?>
 
 <a href="<?= $router->generate('product-list') ?>" class="btn btn-success float-right">Retour</a>
 <?php // le traitement ci dessous peut-être délégué à une méthode... ?>

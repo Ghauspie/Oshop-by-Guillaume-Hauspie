@@ -54,7 +54,7 @@ class Product extends CoreModel {
      * @param int $productId ID du produit
      * @return Product
      */
-    public function find($productId)
+    public static function find($productId)
     {
         // récupérer un objet PDO = connexion à la BDD
         $pdo = Database::getPDO();
@@ -82,7 +82,7 @@ class Product extends CoreModel {
      * 
      * @return Product[]
      */
-    public function findAll()
+    public static function findAll()
     {
         $pdo = Database::getPDO();
         $sql = 'SELECT * FROM `product`';
@@ -327,5 +327,47 @@ class Product extends CoreModel {
         
         // Si on arrive ici, c'est que quelque chose n'a pas bien fonctionné => FAUX
         return false;
+    }
+    public function update()
+    {
+        // Récupération de l'objet PDO représentant la connexion à la DB
+        $pdo = Database::getPDO();
+
+        // Ecriture de la requête UPDATE
+        $sql = "
+            UPDATE `product`
+            SET
+                name = :name,
+                description = :description,
+                picture = :picture,
+                updated_at = NOW()
+            WHERE id = :id
+        ";
+
+        $pdoStatement = $pdo->prepare($sql);
+
+        // on utilise bindValue et pas simplement un array
+        // avantage : on peut contraindre les types de données
+        $pdoStatement->bindValue(':id', $this->id, PDO::PARAM_INT);
+        $pdoStatement->bindValue(':name', $this->name, PDO::PARAM_STR);
+        $pdoStatement->bindValue(':description', $this->description, PDO::PARAM_STR);
+        $pdoStatement->bindValue(':picture', $this->picture, PDO::PARAM_STR);
+
+        // Execution de la requête de mise à jour
+       return $pdoStatement->execute();
+    }
+    public function delete()
+    {
+        $pdo= Database::getPDO();
+    
+        $sql= "DELETE FROM `Product` WHERE id =:id";
+
+        $pdoStatement =$pdo->prepare($sql);
+
+        $pdoStatement->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+        $pdoStatement->execute();
+        
+        return ($pdoStatement->rowCount()>0);
     }
 }

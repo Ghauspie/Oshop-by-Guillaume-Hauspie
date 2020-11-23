@@ -1,4 +1,3 @@
- 
 <?php
 
 namespace App\Controllers;
@@ -18,3 +17,4 @@ class ErrorController extends CoreController {
         $this->show('error/err404');
     }
 }
+?>
