@@ -155,7 +155,6 @@ class AppUser extends CoreModel {
         WHERE `email`='$email'"
          ;
          
-       
         $pdoStatement=$pdo->query($sql);
 
         $Login = $pdoStatement->fetchObject('App\Models\AppUser');

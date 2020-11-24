@@ -56,6 +56,12 @@ class LoginController extends CoreController
             // On recuperer les propriétés de l'instance.
             $Login->getEmail($email);           
             $Login->getPassword($password);
+            if ($password==$testconnected->getPassword()){
+                echo 'vous etez connecté'.$testconnected->getFirstname();
+            }
+            else {
+                echo 'Votre mot de passe est incorrect';
+            }
             dump($testconnected);
             die;
             // On tente de sauvegarder les données en DB...
