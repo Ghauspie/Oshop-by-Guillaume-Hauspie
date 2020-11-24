@@ -8,6 +8,10 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
+                    
+                <?php // si un user est connecté
+                 if (isset($_SESSION['userObject'])) : 
+        ?>
                     <li class="nav-item active">
                         <a class="nav-link" href="<?= $router->generate('main-home') ?>">Accueil <span class="sr-only">(current)</span></a>
                     </li>
@@ -29,16 +33,17 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Sélections Accueil &amp; Footer</a>
                     </li>
-                    <?php
-        // si un user est connecté
-        if (!empty($_SESSION['connectedUser'])) : 
-        ?>
-            <li class="nav-item"><p><?= $username ?></p>
-            <a href="#">Deconnexion</a>
-        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= $router->generate('current-user') ?>">Users</a>
+                    </li>
+
+                    <li class="nav-item">
+                    <a class="nav-link" href="<?= $router->generate('user-disconnect') ?>">Deconnexion</a>
+                    </li>
+                  
         <?php else : // sinon ?>
             <li class="nav-item">
-                        <a class="nav-link" href="<?= $router->generate('main-login') ?>">Login</a>
+                        <a class="nav-link" href="<?= $router->generate('user-login') ?>">Login</a>
                     </li>
 
         <?php endif; ?>

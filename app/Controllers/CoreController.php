@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Controllers\ErrorController;
+
 class CoreController {
     /**
      * Méthode permettant d'afficher du code HTML en se basant sur les views
@@ -41,5 +43,42 @@ class CoreController {
         require_once __DIR__.'/../views/layout/header.tpl.php';
         require_once __DIR__.'/../views/'.$viewName.'.tpl.php';
         require_once __DIR__.'/../views/layout/footer.tpl.php';
+    }
+
+  /**
+     * Méthode de vérification des droits du user courant pour faire telle ou telle action
+     *
+     * @param array $roles
+     * @return bool return true si ok, redirige vers une erreur si pas ok
+     */
+    public function checkAuthorization($roles=[]){
+        global $router;
+
+         // Si l'utilisateur est connecté
+         if (isset($_SESSION['userId'])) {
+             // Alors on récupère cet utilisateur
+            $currentUser=$_SESSION['userObject'];
+            // On récupère son rôle
+            $currentUserRole =$currentUser->getRole();
+            // Si le rôle fait partie des rôles autorisés (fournis en paramètre)
+            if (in_array($currentUserRole,$roles)){
+                // Alors on return true
+                return true;
+            }
+                else {
+                    // Sinon, on affiche une erreur 403
+                    $error= new ErrorController();
+                    $error->err403();
+                    // Et on arrête tout...
+                    exit;
+                }
+            
+         }
+         // Sinon, l'utilisateur n'est pas connecté
+         else {
+             $loginPageURl= $router->generate('user-login');
+             // On redirige vers la page de login
+             header('Location:'. $loginPageURl);
+         }
     }
 }

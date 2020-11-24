@@ -8,6 +8,7 @@
 // mais aussi d'activer le chargement automatique des classes (convention PSR-4)
 require_once '../vendor/autoload.php';
 
+session_start();
 /* ------------
 --- ROUTAGE ---
 -------------*/
@@ -173,24 +174,87 @@ $router->map(
 //Page login 
 $router->map(
     'GET',
-    '/login',
+    '/user/login',
     [
         'method' => 'login',
-        'controller' => '\App\Controllers\LoginController'
+        'controller' => '\App\Controllers\UserController'
     ],
-    'main-login'
+    'user-login'
 );
 //connected login
 $router->map(
     'POST',
-    '/login',
+    '/user/login',
     [
         'method' => 'connected',
-        'controller' => '\App\Controllers\LoginController'
+        'controller' => '\App\Controllers\UserController'
     ],
-    'main-login-connected'
+    'user-login-connected'
 );
 
+// Déconnexion de l'utilisateur
+$router->map(
+    'GET',
+    '/user/disconnect',
+    [
+        'method' => 'disconnect',
+        'controller' => '\App\Controllers\UserController'
+    ],
+    'user-disconnect'
+);
+
+// Liste des Utilisateur enregistré
+$router->map(
+    'GET',
+    '/user/user',
+    [
+        'method' => 'list',
+        'controller' => '\App\Controllers\UserController'
+    ],
+    'current-user'
+);
+
+// Pour allez sur la page creation d'un utilisateur
+$router->map(
+    'GET',
+    '/user/add',
+    [
+        'method' => 'add',
+        'controller' => '\App\Controllers\UserController'
+    ],
+    'user-add'
+);
+//creation d'un utilisateur
+$router->map(
+    'POST',
+    '/user/add',
+    [
+        'method' => 'create',
+        'controller' => '\App\Controllers\UserController'
+    ],
+    'user-create'
+);
+// Edition d'un utilisateur
+$router->map(
+    'GET',
+    '/user/[i:id]/edit',
+    [
+        'method' => 'update',
+        'controller' => '\App\Controllers\UserController'
+    ],
+    'user-update'
+);
+
+// Edition d'une catégorie
+$router->map(
+    'POST',
+    '/user/[i:id]/edit',
+    [
+        'method' => 'updateBDD',
+        'controller' => '\App\Controllers\UserController'
+    ],
+    'user-updateBDD'
+);
 /* -------------
 --- DISPATCH ---
 --------------*/
