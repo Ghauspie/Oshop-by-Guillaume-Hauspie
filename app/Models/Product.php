@@ -305,15 +305,25 @@ class Product extends CoreModel {
 
         // Ecriture de la requête INSERT INTO
         $sql = "
-            INSERT INTO `product` (name, description, picture, brand_id, type_id)
-            VALUES ('{$this->name}', '{$this->description}','{$this->picture}', '{$this->brand_id}', '{$this->type_id}')
+            INSERT INTO `product` (name, description, brand_id, type_id, picture)
+            VALUES (:name, :description, :brand_id, :type_id, :picture)
         ";
 
         // echo $sql;
         // die;
 
-        // Execution de la requête d'insertion (exec, pas query)
-        $insertedRows = $pdo->exec($sql);
+        // Prépartion de la requête d'insertion (évite les injections SQL)
+        // https://www.php.net/manual/fr/pdo.prepare.php
+        $query = $pdo->prepare($sql);
+
+        // Execution de la requête d'insertion (ici, on utilise execute car on a fait un prepare())
+        $insertedRows = $query->execute([
+            ':name' => $this->name,
+            ':description' => $this->description,
+            ':brand_id' => $this->brand_id,
+            ':type_id' => $this->type_id,
+            ':picture' => $this->picture
+        ]);
 
         // Si au moins une ligne ajoutée
         if ($insertedRows > 0) {
@@ -328,6 +338,13 @@ class Product extends CoreModel {
         // Si on arrive ici, c'est que quelque chose n'a pas bien fonctionné => FAUX
         return false;
     }
+
+        /**
+     * Méthode permettant de mettre à jour un enregistrement dans la table product
+     * L'objet courant doit contenir l'id, et toutes les données à ajouter : 1 propriété => 1 colonne dans la table
+     * 
+     * @return bool
+     */
     public function update()
     {
         // Récupération de l'objet PDO représentant la connexion à la DB
@@ -356,18 +373,9 @@ class Product extends CoreModel {
         // Execution de la requête de mise à jour
        return $pdoStatement->execute();
     }
+
     public function delete()
     {
-        $pdo= Database::getPDO();
-    
-        $sql= "DELETE FROM `Product` WHERE id =:id";
-
-        $pdoStatement =$pdo->prepare($sql);
-
-        $pdoStatement->bindValue(':id', $this->id, PDO::PARAM_INT);
-
-        $pdoStatement->execute();
-        
-        return ($pdoStatement->rowCount()>0);
+        // TODO
     }
 }

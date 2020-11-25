@@ -199,14 +199,19 @@ class Category extends CoreModel {
         return false;
     }
 
-    //on créer la function pour faire les modification d'une category
+    /**
+     * Méthode permettant de mettre à jour un enregistrement dans la table category
+     * L'objet courant doit contenir l'id, et toutes les données à ajouter : 1 propriété => 1 colonne dans la table
+     * 
+     * @return bool
+     */
     public function update()
     {
         // Récupération de l'objet PDO représentant la connexion à la DB
         $pdo = Database::getPDO();
 
         // Ecriture de la requête UPDATE
-        $sql = $pdo->prepare("
+        $sql = "
             UPDATE `category`
             SET
                 name = :name,
@@ -214,37 +219,44 @@ class Category extends CoreModel {
                 picture = :picture,
                 updated_at = NOW()
             WHERE id = :id
-        ");
+        ";
 
-        //$pdoStatement = $pdo->prepare($sql);
+        $pdoStatement = $pdo->prepare($sql);
 
         // on utilise bindValue et pas simplement un array
         // avantage : on peut contraindre les types de données
-        $sql->bindValue(':id', $this->id, PDO::PARAM_INT);
-        $sql->bindValue(':name', $this->name, PDO::PARAM_STR);
-        $sql->bindValue(':subtitle', $this->subtitle, PDO::PARAM_STR);
-        $sql->bindValue(':picture', $this->picture, PDO::PARAM_STR);
+        $pdoStatement->bindValue(':id', $this->id, PDO::PARAM_INT);
+        $pdoStatement->bindValue(':name', $this->name, PDO::PARAM_STR);
+        $pdoStatement->bindValue(':subtitle', $this->subtitle, PDO::PARAM_STR);
+        $pdoStatement->bindValue(':picture', $this->picture, PDO::PARAM_STR);
 
         // Execution de la requête de mise à jour
-       return $sql->execute();
+       return $pdoStatement->execute();
     }
 
-     /**
-     * Méthode de supression d'une catégorie 
+    /**
+     * Méthode de supression d'une catégorie
      *
-     * @return bool Retourne 'True' si la catégorie a bien été supprimée
+     * @return bool Return `true` si la catégorie a bien été supprimée
      */
-    public function delete(){
-        $pdo= Database::getPDO();
-    
-        $sql= "DELETE FROM `category` WHERE id =:id";
+    public function delete()
+    {
+        $pdo = Database::getPDO();
 
-        $pdoStatement =$pdo->prepare($sql);
+        $sql = '
+            DELETE FROM `category`
+            WHERE id = :id
+        ';
+
+        $pdoStatement = $pdo->prepare($sql);
 
         $pdoStatement->bindValue(':id', $this->id, PDO::PARAM_INT);
 
         $pdoStatement->execute();
-        
-        return ($pdoStatement->rowCount()>0);
+
+        // https://www.php.net/manual/fr/pdostatement.rowcount.php
+        // on return true si au moins une ligne a été supprimée
+        return ($pdoStatement->rowCount() > 0);
     }
+
 }

@@ -1,11 +1,4 @@
 {
-    "name": "etudiant/s06-o-shop-ghauspie",
-    "authors": [
-        {
-            "name": "Guillaume Hauspie",
-            "email": "hauspie.guillaume@free.fr"
-        }
-    ],
     "require": {
         "symfony/var-dumper": "^5.0",
         "altorouter/altorouter": "^2.0",

@@ -29,7 +29,7 @@ class Type extends CoreModel {
      * @param int $typeId ID du type
      * @return Type
      */
-    public static function find($typeId)
+    public function find($typeId)
     {
         // se connecter à la BDD
         $pdo = Database::getPDO();
@@ -52,7 +52,7 @@ class Type extends CoreModel {
      * 
      * @return Type[]
      */
-    public static function findAll()
+    public function findAll()
     {
         $pdo = Database::getPDO();
         $sql = 'SELECT * FROM `type`';
@@ -121,101 +121,4 @@ class Type extends CoreModel {
     {
         $this->footer_order = $footer_order;
     }
-
-     /**
-     * Méthode permettant d'ajouter un enregistrement dans la table category.
-     * L'objet courant doit contenir toutes les données à ajouter : 1 propriété => 1 colonne dans la table
-     * 
-     * @return bool
-     */
-    public function insert()
-    {
-        // Récupération de l'objet PDO représentant la connexion à la DB
-        $pdo = Database::getPDO();
-
-        // Ecriture de la requête INSERT INTO
-        $sql = "
-            INSERT INTO `type` (name, subtitle, picture)
-            VALUES (:name, :subtitle, :picture)
-        ";
-
-        // Préparation de la requête d'insertion (+ sécurisé que exec directement)
-        // @see https://www.php.net/manual/fr/pdo.prepared-statements.php
-        //
-        // Permet de lutter contre les injections SQL
-        // @see https://portswigger.net/web-security/sql-injection (exemples avec SELECT)
-        // @see https://stackoverflow.com/questions/681583/sql-injection-on-insert (exemples avec INSERT INTO)
-        $query = $pdo->prepare($sql);
-
-        // Execution de la requête d'insertion
-        // On peut envoyer les données « brutes » à execute() qui va les "sanitize" pour SQL.
-        $query->execute([
-          ':name' => $this->name,
-          ':subtitle' => $this->subtitle,
-          ':picture' => $this->picture,
-        ]);
-
-        // Si au moins une ligne ajoutée
-        if ($query->rowCount() > 0) {
-            // Alors on récupère l'id auto-incrémenté généré par MySQL
-            $this->id = $pdo->lastInsertId();
-
-            // On retourne VRAI car l'ajout a parfaitement fonctionné
-            return true;
-            // => l'interpréteur PHP sort de cette fonction car on a retourné une donnée
-        }
-        
-        // Si on arrive ici, c'est que quelque chose n'a pas bien fonctionné => FAUX
-        return false;
-    }
-
-    //on créer la function pour faire les modification d'une category
-    public function update()
-    {
-        // Récupération de l'objet PDO représentant la connexion à la DB
-        $pdo = Database::getPDO();
-
-        // Ecriture de la requête UPDATE
-        $sql = $pdo->prepare("
-            UPDATE `category`
-            SET
-                name = :name,
-                subtitle = :subtitle,
-                picture = :picture,
-                updated_at = NOW()
-            WHERE id = :id
-        ");
-
-        //$pdoStatement = $pdo->prepare($sql);
-
-        // on utilise bindValue et pas simplement un array
-        // avantage : on peut contraindre les types de données
-        $sql->bindValue(':id', $this->id, PDO::PARAM_INT);
-        $sql->bindValue(':name', $this->name, PDO::PARAM_STR);
-        $sql->bindValue(':subtitle', $this->subtitle, PDO::PARAM_STR);
-        $sql->bindValue(':picture', $this->picture, PDO::PARAM_STR);
-
-        // Execution de la requête de mise à jour
-       return $sql->execute();
-    }
-
-     /**
-     * Méthode de supression d'une catégorie 
-     *
-     * @return bool Retourne 'True' si la catégorie a bien été supprimée
-     */
-    public function delete(){
-        $pdo= Database::getPDO();
-    
-        $sql= "DELETE FROM `category` WHERE id =:id";
-
-        $pdoStatement =$pdo->prepare($sql);
-
-        $pdoStatement->bindValue(':id', $this->id, PDO::PARAM_INT);
-
-        $pdoStatement->execute();
-        
-        return ($pdoStatement->rowCount()>0);
-    }
-
 }

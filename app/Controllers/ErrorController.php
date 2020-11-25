@@ -16,12 +16,12 @@ class ErrorController extends CoreController {
         // Puis on gère l'affichage
         $this->show('error/err404');
     }
+
     public function err403() {
-        // On envoie le header 404
-        header('HTTP/1.0 403 Not Found');
+        // On envoie le header 403
+        header('HTTP/1.0 403 Unauthorized');
 
         // Puis on gère l'affichage
         $this->show('error/err403');
     }
 }
-?>

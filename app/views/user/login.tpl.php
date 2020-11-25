@@ -1,41 +1,13 @@
-<div id="login">
-      <form action="" id="login-form" method="post" autocomplete="off">
-        <div id="form-title">
-          Connexion
-        </div>
-        <div class="field">
-          <label 
-            class="field-label"
-            for="field-username"
-          >
-            Identifiant
-          </label>
-          <input
-            class="field-input"
-            id="field-username"
-            name="email"
-            type="text"
-            placeholder="Votre adresse Email"
-          />
-          <p class="field-info">Obligatoire - Doit contenir au moins @domaine.ext (exemple: Toto@monfournisseur.fr)</p>
-        </div>
-        <div class="field">
-          <label 
-            class="field-label"
-            for="field-password"
-          >
-            Mot de passe
-          </label>
-          <input
-            class="field-input"
-            id="field-password"
-            name="password"
-            type="password"
-            placeholder="Mot de passe"
-          />
-          <p class="field-info">Obligatoire - doit contenir au minimum 3 caractères</p>
-        </div>
-        <div id="errors"></div>
-        <button id="login-submit">Connexion</button>
-      </form>
-    </div>
+<div class="container">
+<form method="post">
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email</label>
+    <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Mot de passe</label>
+    <input name="password" type="password" class="form-control" id="exampleInputPassword1">
+  </div>
+  <button type="submit" class="btn btn-primary">Connexion</button>
+</form>
+</div>

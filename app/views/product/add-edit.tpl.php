@@ -1,4 +1,9 @@
-<?php //var_dump($product->getName()); ?>
+<?php // TODO : gérer l'afichage des erreurs (UI)
+
+if(isset($errorsList)){
+    var_dump($errorsList);
+}
+?>
 
 <a href="<?= $router->generate('product-list') ?>" class="btn btn-success float-right">Retour</a>
 <?php // le traitement ci dessous peut-être délégué à une méthode... ?>

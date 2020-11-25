@@ -7,7 +7,6 @@ use App\Models\{Category, Product};
 
 class MainController extends CoreController {
 
-    
     /**
      * Méthode s'occupant de la page d'accueil
      *
@@ -15,9 +14,10 @@ class MainController extends CoreController {
      */
     public function home()
     {
-        // On vérifie que l'utilisateur a le droit d'accéder à cette page (il doit être admin ou catalog)
-        $this->checkAuthorization(['admin', 'catalog-manager']);
-        
+
+        // On vérifie que l'utilisateur connecté a le droit d'accéder à cette page (il doit être admin ou catalog-manager)
+        CoreController::checkAuthorization(['admin', 'catalog-manager']);
+
         // On récupère les catégories de la home
         // $categoryModel = new Category();
 
@@ -40,4 +40,3 @@ class MainController extends CoreController {
         );
     }
 }
-

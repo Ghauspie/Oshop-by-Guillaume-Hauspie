@@ -75,6 +75,7 @@ class ProductController extends CoreController {
         $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
         $picture = filter_input(INPUT_POST, 'picture', FILTER_VALIDATE_URL);
+        
 
         // var_dump($name, $description, $picture);
 
@@ -149,7 +150,7 @@ class ProductController extends CoreController {
 
             $product->setName(filter_input(INPUT_POST, 'name'));
             $product->setDescription(filter_input(INPUT_POST, 'description'));
-            $product->setPicture(filter_input(INPUT_POST, 'picture'));
+            $product->setPicture(filter_input(INPUT_POST, 'picture', FILTER_VALIDATE_URL));
 
             $this->show(
                 'product/add-edit',
@@ -162,12 +163,20 @@ class ProductController extends CoreController {
             );
         }
     }
+
+    /**
+     * POST Modification d'un produit(dans la BDD).
+     *
+     * @return void
+     */
     public function update($productId)
     {
+
+
         // On tente de récupèrer les données venant du formulaire.
         $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
-        $picture = filter_input(INPUT_POST, 'picture',FILTER_VALIDATE_URL);
+        $picture = filter_input(INPUT_POST, 'picture', FILTER_VALIDATE_URL);
 
         // On vérifie l'existence et la validité de ces données (gestion d'erreur).
 
@@ -190,9 +199,6 @@ class ProductController extends CoreController {
         if (empty($errorsList)) {
 
             $product = Product::find($productId);
-
-            // var_dump($category);
-            // die;
 
             // On met à jour les propriétés de l'instance.
             $product->setName($name);
@@ -217,11 +223,11 @@ class ProductController extends CoreController {
 
         // S'il y a une ou de(s) erreur(s) dans les données...
         else {
-            // On réaffiche le formulaire, mais pré-rempli avec les (mauvaises) données
-            // proposées par l'utilisateur.
-            // Pour ce faire, on instancie un modèle Category, qu'on passe au template.
+            // echo 'Coco ! t\'as des erreurs';
+            // var_dump($errorsList);
 
-            $product =new Product();
+            $product = new Product();
+
             $product->setName(filter_input(INPUT_POST, 'name'));
             $product->setDescription(filter_input(INPUT_POST, 'description'));
             $product->setPicture(filter_input(INPUT_POST, 'picture'));
@@ -229,11 +235,10 @@ class ProductController extends CoreController {
             $this->show(
                 'product/add-edit',
                 [
-                    // On pré-remplit les inputs avec les données BRUTES initialement
-                    // reçues en POST, qui sont actuellement stockées dans le modèle.
+                    // on pré rempli avec les infos saisies précédement
                     'product' => $product,
-                    // On transmet aussi le tableau d'erreurs, pour avertir l'utilisateur.
-                    'errorList' => $errorsList
+                    // on transmet aussi l'array d'erreurs
+                    'errorsList' => $errorsList
                 ]
             );
         }

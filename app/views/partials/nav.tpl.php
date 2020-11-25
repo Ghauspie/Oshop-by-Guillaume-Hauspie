@@ -8,10 +8,6 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    
-                <?php // si un user est connecté
-                 if (isset($_SESSION['userObject'])) : 
-        ?>
                     <li class="nav-item active">
                         <a class="nav-link" href="<?= $router->generate('main-home') ?>">Accueil <span class="sr-only">(current)</span></a>
                     </li>
@@ -33,20 +29,15 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Sélections Accueil &amp; Footer</a>
                     </li>
+                    <?php if (!isset($_SESSION['userObject'])) : ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= $router->generate('current-user') ?>">Users</a>
+                        <a class="nav-link" href="<?= $router->generate('user-login') ?>">Connexion</a>
                     </li>
-
+                    <?php else : ?>
                     <li class="nav-item">
-                    <a class="nav-link" href="<?= $router->generate('user-disconnect') ?>">Deconnexion</a>
+                        <a class="nav-link" href="<?= $router->generate('user-disconnect') ?>">Déconnexion</a>
                     </li>
-                  
-        <?php else : // sinon ?>
-            <li class="nav-item">
-                        <a class="nav-link" href="<?= $router->generate('user-login') ?>">Login</a>
-                    </li>
-
-        <?php endif; ?>
+                    <?php endif; ?>
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
                     <input class="form-control mr-sm-2" type="search" placeholder="Rechercher" aria-label="Rechercher">

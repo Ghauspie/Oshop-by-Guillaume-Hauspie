@@ -8,7 +8,9 @@
 // mais aussi d'activer le chargement automatique des classes (convention PSR-4)
 require_once '../vendor/autoload.php';
 
+// Démarrage du système de session de PHP
 session_start();
+
 /* ------------
 --- ROUTAGE ---
 -------------*/
@@ -63,7 +65,7 @@ $router->map(
     'product-list'
 );
 
-// Ajout produit
+// Formulaire d'ajout produit
 $router->map(
     'GET',
     '/product/add',
@@ -72,6 +74,17 @@ $router->map(
         'controller' => '\App\Controllers\ProductController'
     ],
     'product-add'
+);
+
+// Création produit
+$router->map(
+    'POST',
+    '/product/add',
+    [
+        'method' => 'create',
+        'controller' => '\App\Controllers\ProductController'
+    ],
+    'product-create'
 );
 
 // Edition d'un produit
@@ -83,6 +96,17 @@ $router->map(
         'controller' => '\App\Controllers\ProductController'
     ],
     'product-edit'
+);
+
+// Edition d'un produit
+$router->map(
+    'POST',
+    '/product/[i:id]/edit',
+    [
+        'method' => 'update',
+        'controller' => '\App\Controllers\ProductController'
+    ],
+    'product-update'
 );
 
 // Liste des catégories
@@ -106,50 +130,8 @@ $router->map(
     ],
     'category-add'
 );
-$router->map(
-    'POST',
-    '/product/add',
-    [
-        'method' => 'create',
-        'controller' => '\App\Controllers\ProductController'
-    ],
-    'product-create'
-);
 
-// Edition d'une catégorie
-$router->map(
-    'GET',
-    '/category/[i:id]/edit',
-    [
-        'method' => 'update',
-        'controller' => '\App\Controllers\CategoryController'
-    ],
-    'category-update'
-);
-// Edition d'une catégorie
-$router->map(
-    'POST',
-    '/category/[i:id]/edit',
-    [
-        'method' => 'updateBDD',
-        'controller' => '\App\Controllers\CategoryController'
-    ],
-    'category-updateBDD'
-);
-
-//Suppression d'une catégorie
-$router->map(
-    'GET',
-    '/category/[i:id]/delete',
-    [
-        'method' => 'delete',
-        'controller' => '\App\Controllers\CategoryController'
-    ],
-    'category-delete'
-);
-
-
-//creation d'une categori
+// Création d'une catégorie
 $router->map(
     'POST',
     '/category/add',
@@ -160,18 +142,40 @@ $router->map(
     'category-create'
 );
 
-// Edition d'un produit
+// Edition d'une catégorie
 $router->map(
-    'POST',
-    '/product/[i:id]/edit',
+    'GET',
+    '/category/[i:id]/edit',
     [
-        'method' => 'update',
-        'controller' => '\App\Controllers\ProductController'
+        'method' => 'edit',
+        'controller' => '\App\Controllers\CategoryController'
     ],
-    'product-update'
+    'category-edit'
 );
 
-//Page login 
+// Suppression d'une catégorie
+$router->map(
+    'GET',
+    '/category/[i:id]/delete',
+    [
+        'method' => 'delete',
+        'controller' => '\App\Controllers\CategoryController'
+    ],
+    'category-delete'
+);
+
+//Modification d'une catégorie (soumission du form)
+$router->map(
+    'POST',
+    '/category/[i:id]/edit',
+    [
+        'method' => 'update',
+        'controller' => '\App\Controllers\CategoryController'
+    ],
+    'category-update'
+);
+
+// Affichage du formulaire de connexion
 $router->map(
     'GET',
     '/user/login',
@@ -181,15 +185,16 @@ $router->map(
     ],
     'user-login'
 );
-//connected login
+
+// Traitement du formulaire de connexion
 $router->map(
     'POST',
     '/user/login',
     [
-        'method' => 'connected',
+        'method' => 'loginPost',
         'controller' => '\App\Controllers\UserController'
     ],
-    'user-login-connected'
+    'user-login-post'
 );
 
 // Déconnexion de l'utilisateur
@@ -203,58 +208,6 @@ $router->map(
     'user-disconnect'
 );
 
-// Liste des Utilisateur enregistré
-$router->map(
-    'GET',
-    '/user/user',
-    [
-        'method' => 'list',
-        'controller' => '\App\Controllers\UserController'
-    ],
-    'current-user'
-);
-
-// Pour allez sur la page creation d'un utilisateur
-$router->map(
-    'GET',
-    '/user/add',
-    [
-        'method' => 'add',
-        'controller' => '\App\Controllers\UserController'
-    ],
-    'user-add'
-);
-//creation d'un utilisateur
-$router->map(
-    'POST',
-    '/user/add',
-    [
-        'method' => 'create',
-        'controller' => '\App\Controllers\UserController'
-    ],
-    'user-create'
-);
-// Edition d'un utilisateur
-$router->map(
-    'GET',
-    '/user/[i:id]/edit',
-    [
-        'method' => 'update',
-        'controller' => '\App\Controllers\UserController'
-    ],
-    'user-update'
-);
-
-// Edition d'une catégorie
-$router->map(
-    'POST',
-    '/user/[i:id]/edit',
-    [
-        'method' => 'updateBDD',
-        'controller' => '\App\Controllers\UserController'
-    ],
-    'user-updateBDD'
-);
 /* -------------
 --- DISPATCH ---
 --------------*/

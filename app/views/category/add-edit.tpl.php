@@ -1,7 +1,7 @@
 <?php
 
-if (isset($errorList)) {
-    var_dump($errorList);
+if (isset($errorsList)) {
+    var_dump($errorsList);
 }
 
 ?>
