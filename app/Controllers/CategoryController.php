@@ -292,19 +292,18 @@ class CategoryController extends CoreController {
                 
                 
                 }
-                if ($ok) {
-                    // Si la sauvegarde a fonctionné, on redirige vers la liste des catégories.
-                   echo 'sauvegarde done';
-                   header('Location: /category/list');
+        if ($ok) {
+            // Si la sauvegarde a fonctionné, on redirige vers la liste des catégories.
+            header('Location: /category/list');
                     
-                }
-                else {
-                    // Sinon, on ajoute un message d'erreur à la page actuelle, et on laisse
-                    // l'utilisateur retenter la création.
-                    echo 'La sauvegarde a échoué';
-                }
+        }
+        else {
+            // Sinon, on ajoute un message d'erreur à la page actuelle, et on laisse
+            // l'utilisateur retenter la création.
+            echo 'La sauvegarde a échoué';
+        }
            
-            
+            exit;
     }
     
 }
