@@ -409,4 +409,23 @@ class Product extends CoreModel {
     {
         // TODO
     }
+
+    public function getTags()
+    {
+        $pdo = Database::getPDO();
+
+        // requête
+        $sql = '
+        SELECT tag.id, tag.name
+        FROM tag
+        INNER JOIN product_has_tag ON tag.id = product_has_tag.tag_id
+        INNER JOIN product ON product.id = product_has_tag.product_id
+        WHERE product.id = :id;
+        ';
+
+        $query = $pdo->prepare($sql);
+        $query->bindParam(':id', $this->id, PDO::PARAM_INT);
+        $query->execute();
+        var_dump($query->fetchAll(PDO::FETCH_KEY_PAIR));
+    }
 }

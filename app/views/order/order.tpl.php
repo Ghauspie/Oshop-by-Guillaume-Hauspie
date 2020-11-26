@@ -10,6 +10,8 @@
                     <option value="3">Cérémonie</option>
                     <option value="4">Sortir</option>
                     <option value="5">Vintage</option>
+                    <option value="6">Piscine et bains</option>
+                    <option value="7">Sport</option>
                 </select>
             </div>
         </div>
@@ -23,6 +25,8 @@
                     <option value="3">Cérémonie</option>
                     <option value="4">Sortir</option>
                     <option value="5">Vintage</option>
+                    <option value="6">Piscine et bains</option>
+                    <option value="7">Sport</option>
                 </select>
             </div>
         </div>
@@ -38,6 +42,8 @@
                     <option value="3">Cérémonie</option>
                     <option value="4" selected>Sortir</option>
                     <option value="5">Vintage</option>
+                    <option value="6">Piscine et bains</option>
+                    <option value="7">Sport</option>
                 </select>
             </div>
         </div>
@@ -51,6 +57,8 @@
                     <option value="3">Cérémonie</option>
                     <option value="4">Sortir</option>
                     <option value="5" selected>Vintage</option>
+                    <option value="6">Piscine et bains</option>
+                    <option value="7">Sport</option>
                 </select>
             </div>
         </div>
@@ -64,6 +72,8 @@
                     <option value="3" selected>Cérémonie</option>
                     <option value="4">Sortir</option>
                     <option value="5">Vintage</option>
+                    <option value="6">Piscine et bains</option>
+                    <option value="7">Sport</option>
                 </select>
             </div>
         </div>

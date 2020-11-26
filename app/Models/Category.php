@@ -217,6 +217,7 @@ class Category extends CoreModel {
                 name = :name,
                 subtitle = :subtitle,
                 picture = :picture,
+                home_order = :home_order,
                 updated_at = NOW()
             WHERE id = :id
         ";
@@ -229,6 +230,7 @@ class Category extends CoreModel {
         $pdoStatement->bindValue(':name', $this->name, PDO::PARAM_STR);
         $pdoStatement->bindValue(':subtitle', $this->subtitle, PDO::PARAM_STR);
         $pdoStatement->bindValue(':picture', $this->picture, PDO::PARAM_STR);
+        $pdoStatement->bindValue(':home_order', $this->home_order, PDO::PARAM_INT);
 
         // Execution de la requête de mise à jour
        return $pdoStatement->execute();
@@ -258,60 +260,40 @@ class Category extends CoreModel {
         // on return true si au moins une ligne a été supprimée
         return ($pdoStatement->rowCount() > 0);
     }
-    public function updateorder(){
-        // Récupération de l'objet PDO représentant la connexion à la DB
+
+    /**
+     * Ecriture des emplacements de catégories sur la home en BDD
+     *
+     * @param array $spots
+     * @return bool true si ok, false si ko
+     */
+    public static function setHomeSelection($spots)
+    {
         $pdo = Database::getPDO();
-   
-        // Ecriture de la requête UPDATE
-        $sql = "
-        UPDATE `category`
-            SET
-                home_order = :home_order,
-                updated_at = NOW()
-            WHERE id = :id
-        ";
-   
-           $query = $pdo->prepare($sql);
-   
-           // Execution de la requête d'insertion (ici, on utilise execute car on a fait un prepare())
-           $insertedRows = $query->execute([
-               ':id' => $this->id,
-               ':home_order' => $this->home_order,
-           ]); 
-   
-         // Si au moins une ligne ajoutée
-         if ($insertedRows > 0) {
-           // Alors on récupère l'id auto-incrémenté généré par MySQL
-           $this->id = $pdo->lastInsertId();
-   
-           // On retourne VRAI car l'ajout a parfaitement fonctionné
-           return true;
-           // => l'interpréteur PHP sort de cette fonction car on a retourné une donnée
-       }
-       
-       // Si on arrive ici, c'est que quelque chose n'a pas bien fonctionné => FAUX
-       return false;
-       
-        // Execution de la requête de mise à jour
-   }
 
-   public function reset(){
-       // Récupération de l'objet PDO représentant la connexion à la DB
-       $pdo = Database::getPDO();
+        try {
+            // on tente une insertion des données dans la base
 
-       // Ecriture de la requête UPDATE
-       $sql = "
-        UPDATE `category`
-        SET
-            home_order = 0,
-            updated_at = NOW()
-    ";
+            foreach ($spots as $homeOrderIndex => $categoryId)
+            {
+                $category = Category::find($categoryId);
+                // var_dump($category);
+                // je redéfinis home_order
+                $category->setHomeOrder($homeOrderIndex + 1);
+                // var_dump($category);
+                // puis j'update en BDD
+                $category->update();
+            }
 
-       $pdoStatement = $pdo->prepare($sql);
+            // si tout se passe bien, on return true
+            return true;
+        } catch (\Exception $e) {
+            //s'il y a un souci
+            // on peut afficher l'erreur ($e)
 
-
-       // Execution de la requête de mise à jour
-       return $pdoStatement->execute();
-   }
+            // on return false
+            return false;
+        }
+    }
 
 }

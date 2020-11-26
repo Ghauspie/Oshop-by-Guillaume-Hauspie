@@ -89,6 +89,21 @@ if (isset($errorsList)) {
                 La marque du produit
             </small>
         </div>
+
+        <div class="form-group">
+            <label for="brand">Tags</label>
+            <select class="custom-select" id="tag" name="tags_id" aria-describedby="brandHelpBlock" value="" multiple>
+                <?php foreach ($tags as $tag) : ?>
+                    <option value="<?= $tag->getId() ?>">
+                        <?= $tag->getName() ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+            <small id="brandHelpBlock" class="form-text text-muted">
+                Les tags du produit
+            </small>
+        </div>
+
         <div class="form-group">
             <label for="type">Type</label>
             <select class="custom-select" id="type" name="type_id" aria-describedby="typeHelpBlock" value="">

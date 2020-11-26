@@ -6,18 +6,17 @@ use App\Controllers\ErrorController;
 
 abstract class CoreController {
 
-
     public function __construct()
     {
-         // Récupération des infos sur la route courante grâce à la variable $match
-         global $match;
-         var_dump($match);
+        // Récupération des infos sur la route courante grâce à la variable $match
+        global $match;
+        // var_dump($match);
 
-         // On récupère le nom de la route courante
+        // On récupère le nom de la route courante
         $routeName = $match['name'];
 
-          // On définit la liste des permissions pour les routes nécessitant une connexion utilisateur
-          $acl = [
+        // On définit la liste des permissions pour les routes nécessitant une connexion utilisateur
+        $acl = [
             'main-home' => ['admin', 'catalog-manager'],
             // 'user-login' => [] // pas besoin car aucune authentification pour accéder à la route
             'user-add' => ['admin'],
@@ -34,85 +33,87 @@ abstract class CoreController {
             'category-delete' => ['admin', 'catalog-manager'],
             'category-create' => ['admin', 'catalog-manager'],
             'category-edit' => ['admin', 'catalog-manager'],
-            'category-update' => ['admin', 'catalog-manager']
-          ];
+            'category-update' => ['admin', 'catalog-manager'],
+            'main-selections' => ['admin'],
+            'category-set_home_selection' => ['admin']
+            // etc...
+        ];
 
-          // Si la route actuelle est dans la liste des ACL(acces control list)
-          if (array_key_exists($routeName, $acl)) {
-              // Alors on récupère l'array des roles asoociés
+        // Si la route actuelle est dans la liste des ACL
+        if (array_key_exists($routeName, $acl)) {
+            // Alors on récupère l'array des roles asoociés
             $authorizedRoles = $acl[$routeName];
+            // var_dump($authorizedRoles);
             $this->checkAuthorization($authorizedRoles);
         }
 
-          // Routes avec check anti-CSRF en POST
-          $csrfTokenToCheckInPost = [
+        // Routes avec check anti-CSRF en POST
+        $csrfTokenToCheckInPost = [
             'user-update',
             'product-update',
             'category-update',
             'user-create',
             'product-create',
-            //'home-postOrder'
+            'category-set_home_selection'
             //etc...
         ];
 
+        // Routes avec check anti-CSRF en GET
         $csrfTokenToCheckInGet = [
-            'category-delete',
-            //'home-list'
+            'category-delete'
             // etc...
         ];
 
-
         // Si la route courante nécessite la vérification du token CSRF
-        if (in_array($routeName, $csrfTokenToCheckInPost)){
+        if (in_array($routeName, $csrfTokenToCheckInPost)) {
             $token = filter_input(INPUT_POST, 'tokenCSRF');
-           // var_dump($token);
-            //var_dump($_SESSION);
-           // exit;
-           // si ils ne sont pas égaux ou vide
+            // var_dump($token);
+            // var_dump($_SESSION);
+            // exit;
+            // si ils ne sont pas égaux ou vide
 
             // si $_SESSION['tokenCSRF'] est définit, alors $sessionToken = $_SESSION['tokenCSRF'], sinon $sessionToken = '';
-           $sessionToken = isset($_SESSION['tokenCSRF'])? $_SESSION['tokenCSRF']: '';
-           if ($token !==$sessionToken || empty($token))
-           {
-             // on a un souci, on affiche une 403
-             ErrorController::err403();
-             // et surtout, on arrête tout !!!
-             exit;
-           }
-           else 
-           {
-            unset($_SESSION['tokenCSRF']);
-           }
-        };
+            $sessionToken = isset($_SESSION['tokenCSRF']) ? $_SESSION['tokenCSRF'] : '';
+
+            if ($token !== $sessionToken || empty($token)) {
+                // on a un souci, on affiche une 403
+                ErrorController::err403();
+                // et surtout, on arrête tout !!!
+                exit;
+            }
+            else {
+                unset($_SESSION['tokenCSRF']);
+            }
+        }
+
         // Si la route courante nécessite la vérification du token CSRF
-        if (in_array($routeName, $csrfTokenToCheckInGet)){
+        if (in_array($routeName, $csrfTokenToCheckInGet)) {
             $token = filter_input(INPUT_GET, 'tokenCSRF');
-           // var_dump($token);
-            //var_dump($_SESSION);
-           // exit;
-           // si ils ne sont pas égaux ou vide
+            // var_dump($token);
+            // var_dump($_SESSION);
+            // exit;
+            // si ils ne sont pas égaux ou vide
 
             // si $_SESSION['tokenCSRF'] est définit, alors $sessionToken = $_SESSION['tokenCSRF'], sinon $sessionToken = '';
-           $sessionToken = isset($_SESSION['tokenCSRF'])? $_SESSION['tokenCSRF']: '';
-           if ($token !==$sessionToken || empty($token))
-           {
-             // on a un souci, on affiche une 403
-             ErrorController::err403();
-             // et surtout, on arrête tout !!!
-             exit;
-           }
-           else 
-           {
-            unset($_SESSION['tokenCSRF']);
-           }
-        };
+            $sessionToken = isset($_SESSION['tokenCSRF']) ? $_SESSION['tokenCSRF'] : '';
+
+            if ($token !== $sessionToken || empty($token)) {
+                // on a un souci, on affiche une 403
+                ErrorController::err403();
+                // et surtout, on arrête tout !!!
+                exit;
+            }
+            else {
+                unset($_SESSION['tokenCSRF']);
+            }
+        }
 
     }
 
     protected function generateTokenCSRF()
     {
         // on met en session une string générée aléatoirement
-        $_SESSION['tokenCSRF']=bin2hex(random_bytes(32));
+        $_SESSION['tokenCSRF'] = bin2hex(random_bytes(32));
         // puis on return cette string (depuis la session)
         return $_SESSION['tokenCSRF'];
         // on pourait générer le token de différentes manières...(hash...)
@@ -182,7 +183,6 @@ abstract class CoreController {
             else {
                 // Sinon, on affiche une erreur 403
                 ErrorController::err403();
-                //$error->err403();
                 // Et on arrête tout...
                 exit;
 
@@ -190,9 +190,9 @@ abstract class CoreController {
         }
         // Sinon (l'utilisateur n'est pas connecté)
         else {
-            //$loginPageUrl = $router->generate('user-login');
+            $loginPageUrl = $router->generate('user-login');
             // On redirige vers la page de login
-        header('Location: /user/login'  /*$loginPageUrl*/);
+            header('Location: ' . $loginPageUrl);
             exit;
         }
     }

@@ -241,24 +241,37 @@ $router->map(
     'user-create'
 );
 
-// Affichage du formulaire gestion home 
+// Affichage des catégories selectionnées sur la home
 $router->map(
     'GET',
-    '/order/order',
+    '/selections',
     [
-        'method' => 'listorder',
+        'method' => 'selections',
+        'controller' => '\App\Controllers\MainController'
+    ],
+    'main-selections'
+);
+
+// Affichage du formulaire de selection des catégories
+$router->map(
+    'GET',
+    '/category/home-selection',
+    [
+        'method' => 'getHomeSelection',
         'controller' => '\App\Controllers\CategoryController'
     ],
-    'category-order'
+    'category-get_home_selection'
 );
+
+// Soumission du formulaire de selection des catégories
 $router->map(
     'POST',
-    '/order/order',
+    '/category/home-selection',
     [
-        'method' => 'updateorder',
+        'method' => 'setHomeSelection',
         'controller' => '\App\Controllers\CategoryController'
     ],
-    'category-updateorder'
+    'category-set_home_selection'
 );
 
 /* -------------

@@ -15,11 +15,6 @@ class MainController extends CoreController {
     public function home()
     {
 
-        // On vérifie que l'utilisateur connecté a le droit d'accéder à cette page (il doit être admin ou catalog-manager)
-        //CoreController::checkAuthorization(['admin', 'catalog-manager']);
-        //désormais on utilise via le corecontroller
-        
-
         // On récupère les catégories de la home
         // $categoryModel = new Category();
 
@@ -40,5 +35,16 @@ class MainController extends CoreController {
                 'products' => $products
             ]
         );
+    }
+
+    /**
+     * Liste de liens vers les pages de gestion des sélections
+     * Une sélection est une mise en avant de ressources à certains endroits du site
+     *
+     * @return void
+     */
+    public function selections()
+    {
+        $this->show('main/selections');
     }
 }

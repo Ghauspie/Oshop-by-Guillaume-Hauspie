@@ -27,8 +27,9 @@ class CategoryController extends CoreController {
         // On les envoie à la vue
         $this->show(
             'category/list',
-            ['categories' => $categories,
-            'tokenCSRF' => $this->generateTokenCSRF()
+            [
+                'categories' => $categories,
+                'tokenCSRF' => $this->generateTokenCSRF()
             ]
         );
     }
@@ -262,49 +263,102 @@ class CategoryController extends CoreController {
         }
     }
 
-    public function listorder()
+    /**
+     * Affiche le formulaire de sélection des catégories présentes sur la home
+     *
+     * @return void
+     */
+    public function getHomeSelection()
     {
-        $this->show('order/order');
+        $categories = Category::findAll();
+
+        if ($categories) {
+            $this->show(
+                'category/home-selection',
+                [
+                    'categories' => $categories,
+                    'tokenCSRF' => $this->generateTokenCSRF()
+                ]
+            );
+        }
     }
 
-    public function updateorder()
+    /**
+     * Modification de l'ordre des catégories sur la home (depuis le POST du form)
+     *
+     * @return void
+     */
+    public function setHomeSelection()
     {
-       
-        $reset=New category;
-        $reset=$reset->reset();
+
+        global $router;
+
+        // 1. Récupération des infos du form
+        // 2. Validation des données
+        // 3. Si OK, sauvegarde en BDD
+        // 4. Si pas OK, affichage d'erreur
+
+        // On récupère un array qui va contenir l'emplacement des catégories
+        // var_dump($_POST);
+        $spots = $_POST['emplacement'];
+        // var_dump($spots);
+
+        $errorsList = [];
+
+        if (in_array('', $spots)) {
+            $errorsList[] = 'Il faut sélectionner une catégorie pour chaque emplacement.';
+        }
         
-            // 1. On récupère la catégorie concernée dans la BDD => on récupère un objet
-            // 2. On alimente cet objet avec les données mises à jour
-            // 3. On met à jour dans la BDD
-            foreach ($_POST['emplacement'] as $home_order => $categoryId) {
-                // On récupère la catégorie courante (dans la BDD)
-                $home_order+=1;
-                dump($home_order, $categoryId);
-                $Order = Category::find($categoryId);
-                //dump($Order);
-                //die;
-                // On met à jour les propriétés de l'instance.
-                $Order->getId($categoryId);
-                $Order->setHomeOrder($home_order);
-                dump($Order);
-                // on met a jours les données sur la BDD
-                $ok = $Order->updateorder();
-                
-                
-                }
-                if ($ok) {
-                    // Si la sauvegarde a fonctionné, on redirige vers la liste des catégories.
-                   echo 'sauvegarde done';
-                   header('Location: /category/list');
-                    
-                }
-                else {
-                    // Sinon, on ajoute un message d'erreur à la page actuelle, et on laisse
-                    // l'utilisateur retenter la création.
-                    echo 'La sauvegarde a échoué';
-                }
-           
-            
+        // ci-dessous, le tableau dédoublonné
+        // dump(array_unique($spots));
+
+        // ci-dessous, le nombre d'items dans le tableau dédoublonné
+        // dump(count(array_unique($spots)));
+
+        // ci-dessous, le nombre d'items dans le tableau (non dédoublonné)
+        // dump(count($spots));
+
+        if (count(array_unique($spots)) !== count($spots)) {
+            $errorsList[] = 'Une catégorie à la fois !';
+        }
+
+        // éventuellement d'autres vérifs...quoi qu'un peu overkill
+
+        // dump($errorsList);
+
+        // si j'ai une ou des erreur(s)
+        if (!empty($errorsList)) {
+            $categories = Category::findAll();
+
+            $this->show('category/home-selection',
+                [
+                    'categories' => $categories,
+                    'errors' => $errorsList,
+                    'tokenCSRF' => $this->generateTokenCSRF(),
+                    'spots' => $spots 
+                ]
+                );
+        }
+        // sinon
+        else {
+            $ok = Category::setHomeSelection($spots);
+
+            // var_dump($ok);
+
+            if ($ok) {
+                $location = $router->generate('main-selections');
+                header("Location: $location");
+            }
+            else {
+                $errorsList[] = 'La sauvegarde a échoué !';
+                var_dump($errorsList);
+                $categories = Category::findAll();
+                $this->show('category/home-selection', [
+                    'categories' => $categories,
+                    'errorsList' => $errorsList,
+                    'tokenCSRF' => $this->generateTokenCSRF()
+                ]);
+            }
+        }
     }
-    
 }

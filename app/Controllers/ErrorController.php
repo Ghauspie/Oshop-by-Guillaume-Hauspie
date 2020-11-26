@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controllers;
- 
+
 // Classe gérant les erreurs (404, 403)
 class ErrorController extends CoreController {
     /**
@@ -14,7 +14,7 @@ class ErrorController extends CoreController {
         header('HTTP/1.0 404 Not Found');
 
         // Puis on gère l'affichage
-        $this->show('error/err404');
+        CoreController::show('error/err404');
         exit;
     }
 

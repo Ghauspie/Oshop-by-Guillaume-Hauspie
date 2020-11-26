@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\{Product, Category, Brand, Type};
+use App\Models\{Product, Category, Brand, Type, Tag};
 
 /**
  * Controller dédié à l'affichage des produits
@@ -42,6 +42,7 @@ class ProductController extends CoreController {
                 'categories' => Category::findAll(),
                 'brands' => Brand::findAll(),
                 'types' => Type::findAll(),
+                'tags' => Tag::findAll(),
                 'tokenCSRF' => $this->generateTokenCSRF()
             ]
         );
@@ -58,6 +59,8 @@ class ProductController extends CoreController {
         $productModel = new Product();
         $product = $productModel->find($productId);
 
+        $product->getTags();
+
         // On affiche notre vue en transmettant les infos du produit
         $this->show(
             'product/add-edit',
@@ -66,6 +69,7 @@ class ProductController extends CoreController {
                 'categories' => Category::findAll(),
                 'brands' => Brand::findAll(),
                 'types' => Type::findAll(),
+                'tags' => Tag::findAll(),
                 'tokenCSRF' => $this->generateTokenCSRF()
             ]
         );

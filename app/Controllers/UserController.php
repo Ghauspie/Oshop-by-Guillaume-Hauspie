@@ -86,7 +86,7 @@ class UserController extends CoreController {
     {
 
         // On autorise uniquement les admin à accéder à cette page
-        //CoreController::checkAuthorization(['admin']);
+        // CoreController::checkAuthorization(['admin']);
 
         // On récupère tous les users
         $users = AppUser::findAll();
@@ -103,8 +103,9 @@ class UserController extends CoreController {
     public function add()
     {
         // On autorise uniquement les admin à accéder à cette page
-        //CoreController::checkAuthorization(['admin']);
-        $this->show('user/add-edit', 
+        // CoreController::checkAuthorization(['admin']);
+        // ce qui est au dessus est géré par l'ACL
+        $this->show('user/add-edit',
         [
             'user' => new AppUser(),
             'tokenCSRF' => $this->generateTokenCSRF()
@@ -120,7 +121,8 @@ class UserController extends CoreController {
     {
 
         //CoreController::checkAuthorization(['admin']);
-        
+        // ce qui est au dessus est géré par l'ACL
+
         // On tente de récupèrer les données venant du formulaire.
         $firstname = filter_input(INPUT_POST, 'firstname', FILTER_SANITIZE_STRING);
         $lastname = filter_input(INPUT_POST, 'lastname', FILTER_SANITIZE_STRING);
