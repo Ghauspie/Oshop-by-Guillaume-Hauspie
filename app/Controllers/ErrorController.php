@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controllers;
-
+ 
 // Classe gérant les erreurs (404, 403)
 class ErrorController extends CoreController {
     /**
@@ -15,13 +15,15 @@ class ErrorController extends CoreController {
 
         // Puis on gère l'affichage
         $this->show('error/err404');
+        exit;
     }
 
-    public function err403() {
+    public static function err403() {
         // On envoie le header 403
         header('HTTP/1.0 403 Unauthorized');
 
         // Puis on gère l'affichage
-        $this->show('error/err403');
+        CoreController::show('error/err403');
+        exit;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\Product;
+use App\Models\{Product, Category, Brand, Type};
 
 /**
  * Controller dédié à l'affichage des produits
@@ -38,7 +38,11 @@ class ProductController extends CoreController {
         $this->show(
             'product/add-edit',
             [
-                'product' => new Product()
+                'product' => new Product(),
+                'categories' => Category::findAll(),
+                'brands' => Brand::findAll(),
+                'types' => Type::findAll(),
+                'tokenCSRF' => $this->generateTokenCSRF()
             ]
         );
     }
@@ -58,7 +62,11 @@ class ProductController extends CoreController {
         $this->show(
             'product/add-edit',
             [
-                'product' => $product
+                'product' => $product,
+                'categories' => Category::findAll(),
+                'brands' => Brand::findAll(),
+                'types' => Type::findAll(),
+                'tokenCSRF' => $this->generateTokenCSRF()
             ]
         );
     }
@@ -75,6 +83,12 @@ class ProductController extends CoreController {
         $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
         $picture = filter_input(INPUT_POST, 'picture', FILTER_VALIDATE_URL);
+        $price = filter_input(INPUT_POST, 'price', FILTER_VALIDATE_FLOAT);
+        $rate = filter_input(INPUT_POST, 'rate', FILTER_VALIDATE_INT);
+        $status = filter_input(INPUT_POST, 'status', FILTER_VALIDATE_INT);
+        $brand_id = filter_input(INPUT_POST, 'brand_id', FILTER_VALIDATE_INT);
+        $category_id = filter_input(INPUT_POST, 'category_id', FILTER_VALIDATE_INT);
+        $type_id = filter_input(INPUT_POST, 'type_id', FILTER_VALIDATE_INT);
         
 
         // var_dump($name, $description, $picture);
@@ -98,6 +112,25 @@ class ProductController extends CoreController {
             $errorsList[] = 'L\'URL de l\'image est invalide';
         }
 
+        if ($price === false) {
+            $errorList[] = 'Le prix est invalide';
+        }
+        if ($rate === false) {
+            $errorList[] = 'La note est invalide';
+        }
+        if ($status === false) {
+            $errorList[] = 'Le statut est invalide';
+        }
+        if ($brand_id === false) {
+            $errorList[] = 'La marque est invalide';
+        }
+        if ($category_id === false) {
+            $errorList[] = 'La catégorie est invalide';
+        }
+        if ($type_id === false) {
+            $errorList[] = 'Le type est invalide';
+        }
+
         // echo $name;
         // var_dump($errorsList);
 
@@ -116,11 +149,12 @@ class ProductController extends CoreController {
             $product->setName($name);
             $product->setDescription($description);
             $product->setPicture($picture);
-
-            // rustine (en attentant)
-            // TODO : gérer ça plus proprement (dans le form)
-            $product->setTypeId(5);
-            $product->setBrandId(5);
+            $product->setPrice($price);
+            $product->setRate($rate);
+            $product->setStatus($status);
+            $product->setBrandId($brand_id);
+            $product->setCategoryId($category_id);
+            $product->setTypeId($type_id);
 
             // mon objet est "rempli"
             // var_dump($product);
@@ -150,7 +184,13 @@ class ProductController extends CoreController {
 
             $product->setName(filter_input(INPUT_POST, 'name'));
             $product->setDescription(filter_input(INPUT_POST, 'description'));
-            $product->setPicture(filter_input(INPUT_POST, 'picture', FILTER_VALIDATE_URL));
+            $product->setPicture(filter_input(INPUT_POST, 'picture'));
+            $product->setPrice(floatval(filter_input(INPUT_POST, 'price')));
+            $product->setRate(intval(filter_input(INPUT_POST, 'rate')));
+            $product->setStatus(intval(filter_input(INPUT_POST, 'status')));
+            $product->setBrandId(intval(filter_input(INPUT_POST, 'brand_id')));
+            $product->setCategoryId(intval(filter_input(INPUT_POST, 'category_id')));
+            $product->setTypeId(intval(filter_input(INPUT_POST, 'type_id')));
 
             $this->show(
                 'product/add-edit',
@@ -158,7 +198,10 @@ class ProductController extends CoreController {
                     // on pré rempli avec les infos saisies précédement
                     'product' => $product,
                     // on transmet aussi l'array d'erreurs
-                    'errorsList' => $errorsList
+                    'errorsList' => $errorsList,
+                    'categories' => Category::findAll(),
+                    'brands' => Brand::findAll(),
+                    'types' => Type::findAll()
                 ]
             );
         }
@@ -177,6 +220,12 @@ class ProductController extends CoreController {
         $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
         $picture = filter_input(INPUT_POST, 'picture', FILTER_VALIDATE_URL);
+        $price = filter_input(INPUT_POST, 'price', FILTER_VALIDATE_FLOAT);
+        $rate = filter_input(INPUT_POST, 'rate', FILTER_VALIDATE_INT);
+        $status = filter_input(INPUT_POST, 'status', FILTER_VALIDATE_INT);
+        $brand_id = filter_input(INPUT_POST, 'brand_id', FILTER_VALIDATE_INT);
+        $category_id = filter_input(INPUT_POST, 'category_id', FILTER_VALIDATE_INT);
+        $type_id = filter_input(INPUT_POST, 'type_id', FILTER_VALIDATE_INT);
 
         // On vérifie l'existence et la validité de ces données (gestion d'erreur).
 
@@ -204,6 +253,12 @@ class ProductController extends CoreController {
             $product->setName($name);
             $product->setDescription($description);
             $product->setPicture($picture);
+            $product->setPrice($price);
+            $product->setRate($rate);
+            $product->setStatus($status);
+            $product->setBrandId($brand_id);
+            $product->setCategoryId($category_id);
+            $product->setTypeId($type_id);
 
             // On execute la méthode update sur le modèle
             $ok = $product->update();
@@ -231,6 +286,12 @@ class ProductController extends CoreController {
             $product->setName(filter_input(INPUT_POST, 'name'));
             $product->setDescription(filter_input(INPUT_POST, 'description'));
             $product->setPicture(filter_input(INPUT_POST, 'picture'));
+            $product->setPrice(floatval(filter_input(INPUT_POST, 'price')));
+            $product->setRate(intval(filter_input(INPUT_POST, 'rate')));
+            $product->setStatus(intval(filter_input(INPUT_POST, 'status')));
+            $product->setBrandId(intval(filter_input(INPUT_POST, 'brand_id')));
+            $product->setCategoryId(intval(filter_input(INPUT_POST, 'category_id')));
+            $product->setTypeId(intval(filter_input(INPUT_POST, 'type_id')));
 
             $this->show(
                 'product/add-edit',
@@ -238,7 +299,10 @@ class ProductController extends CoreController {
                     // on pré rempli avec les infos saisies précédement
                     'product' => $product,
                     // on transmet aussi l'array d'erreurs
-                    'errorsList' => $errorsList
+                    'errorsList' => $errorsList,
+                    'categories' => Category::findAll(),
+                    'brands' => Brand::findAll(),
+                    'types' => Type::findAll()
                 ]
             );
         }

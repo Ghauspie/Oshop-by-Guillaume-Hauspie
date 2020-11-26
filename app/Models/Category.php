@@ -258,5 +258,60 @@ class Category extends CoreModel {
         // on return true si au moins une ligne a été supprimée
         return ($pdoStatement->rowCount() > 0);
     }
+    public function updateorder(){
+        // Récupération de l'objet PDO représentant la connexion à la DB
+        $pdo = Database::getPDO();
+   
+        // Ecriture de la requête UPDATE
+        $sql = "
+        UPDATE `category`
+            SET
+                home_order = :home_order,
+                updated_at = NOW()
+            WHERE id = :id
+        ";
+   
+           $query = $pdo->prepare($sql);
+   
+           // Execution de la requête d'insertion (ici, on utilise execute car on a fait un prepare())
+           $insertedRows = $query->execute([
+               ':id' => $this->id,
+               ':home_order' => $this->home_order,
+           ]); 
+   
+         // Si au moins une ligne ajoutée
+         if ($insertedRows > 0) {
+           // Alors on récupère l'id auto-incrémenté généré par MySQL
+           $this->id = $pdo->lastInsertId();
+   
+           // On retourne VRAI car l'ajout a parfaitement fonctionné
+           return true;
+           // => l'interpréteur PHP sort de cette fonction car on a retourné une donnée
+       }
+       
+       // Si on arrive ici, c'est que quelque chose n'a pas bien fonctionné => FAUX
+       return false;
+       
+        // Execution de la requête de mise à jour
+   }
+
+   public function reset(){
+       // Récupération de l'objet PDO représentant la connexion à la DB
+       $pdo = Database::getPDO();
+
+       // Ecriture de la requête UPDATE
+       $sql = "
+        UPDATE `category`
+        SET
+            home_order = 0,
+            updated_at = NOW()
+    ";
+
+       $pdoStatement = $pdo->prepare($sql);
+
+
+       // Execution de la requête de mise à jour
+       return $pdoStatement->execute();
+   }
 
 }

@@ -28,5 +28,6 @@ if (isset($errorsList)) {
                     URL relative d'une image (jpg, gif, svg ou png) fournie sur <a href="https://benoclock.github.io/S06-images/" target="_blank">cette page</a>
                 </small>
             </div>
+            <input type="hidden" value="<?= $tokenCSRF ?>" name="tokenCSRF">
             <button type="submit" class="btn btn-primary btn-block mt-5">Valider</button>
         </form>

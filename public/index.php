@@ -208,6 +208,59 @@ $router->map(
     'user-disconnect'
 );
 
+// Listing des utilisateurs
+$router->map(
+    'GET',
+    '/user/list',
+    [
+        'method' => 'list',
+        'controller' => '\App\Controllers\UserController'
+    ],
+    'user-list'
+);
+
+// Ajout utilisateur (affichage du form)
+$router->map(
+    'GET',
+    '/user/add',
+    [
+        'method' => 'add',
+        'controller' => '\App\Controllers\UserController'
+    ],
+    'user-add'
+);
+
+// Ajout utilisateur (dans la base, à la soumission du form)
+$router->map(
+    'POST',
+    '/user/add',
+    [
+        'method' => 'create',
+        'controller' => '\App\Controllers\UserController'
+    ],
+    'user-create'
+);
+
+// Affichage du formulaire gestion home 
+$router->map(
+    'GET',
+    '/order/order',
+    [
+        'method' => 'listorder',
+        'controller' => '\App\Controllers\CategoryController'
+    ],
+    'category-order'
+);
+$router->map(
+    'POST',
+    '/order/order',
+    [
+        'method' => 'updateorder',
+        'controller' => '\App\Controllers\CategoryController'
+    ],
+    'category-updateorder'
+);
+
 /* -------------
 --- DISPATCH ---
 --------------*/

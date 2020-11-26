@@ -29,7 +29,7 @@ class Type extends CoreModel {
      * @param int $typeId ID du type
      * @return Type
      */
-    public function find($typeId)
+    public static function find($typeId)
     {
         // se connecter à la BDD
         $pdo = Database::getPDO();
@@ -52,7 +52,7 @@ class Type extends CoreModel {
      * 
      * @return Type[]
      */
-    public function findAll()
+    public static function findAll()
     {
         $pdo = Database::getPDO();
         $sql = 'SELECT * FROM `type`';
@@ -60,6 +60,11 @@ class Type extends CoreModel {
         $results = $pdoStatement->fetchAll(PDO::FETCH_CLASS, 'App\Models\Type');
         
         return $results;
+    }
+
+    public function update()
+    {
+        
     }
 
     /**
@@ -80,6 +85,16 @@ class Type extends CoreModel {
         $types = $pdoStatement->fetchAll(PDO::FETCH_CLASS, 'App\Models\Type');
         
         return $types;
+    }
+
+    public function insert()
+    {
+        
+    }
+
+    public function delete()
+    {
+        
     }
 
     /**

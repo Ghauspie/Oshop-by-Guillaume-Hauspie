@@ -305,8 +305,26 @@ class Product extends CoreModel {
 
         // Ecriture de la requête INSERT INTO
         $sql = "
-            INSERT INTO `product` (name, description, brand_id, type_id, picture)
-            VALUES (:name, :description, :brand_id, :type_id, :picture)
+            INSERT INTO `product` (
+                name,
+                description,
+                brand_id,
+                type_id,
+                picture,
+                price,
+                rate,
+                status
+            )
+            VALUES (
+                :name,
+                :description,
+                :brand_id,
+                :type_id,
+                :picture,
+                :price,
+                :rate,
+                :status
+            )
         ";
 
         // echo $sql;
@@ -322,7 +340,10 @@ class Product extends CoreModel {
             ':description' => $this->description,
             ':brand_id' => $this->brand_id,
             ':type_id' => $this->type_id,
-            ':picture' => $this->picture
+            ':picture' => $this->picture,
+            ':price' => $this->price,
+            ':rate' => $this->rate,
+            ':status' => $this->status
         ]);
 
         // Si au moins une ligne ajoutée
@@ -357,6 +378,11 @@ class Product extends CoreModel {
                 name = :name,
                 description = :description,
                 picture = :picture,
+                brand_id = :brand_id,
+                type_id = :type_id,
+                price = :price,
+                rate = :rate,
+                status = :status,
                 updated_at = NOW()
             WHERE id = :id
         ";
@@ -369,6 +395,11 @@ class Product extends CoreModel {
         $pdoStatement->bindValue(':name', $this->name, PDO::PARAM_STR);
         $pdoStatement->bindValue(':description', $this->description, PDO::PARAM_STR);
         $pdoStatement->bindValue(':picture', $this->picture, PDO::PARAM_STR);
+        $pdoStatement->bindValue(':brand_id', $this->brand_id, PDO::PARAM_INT);
+        $pdoStatement->bindValue(':type_id', $this->type_id, PDO::PARAM_INT);
+        $pdoStatement->bindValue(':price', $this->price, PDO::PARAM_STR);
+        $pdoStatement->bindValue(':rate', $this->rate, PDO::PARAM_STR);
+        $pdoStatement->bindValue(':status', $this->status, PDO::PARAM_STR);
 
         // Execution de la requête de mise à jour
        return $pdoStatement->execute();

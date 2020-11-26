@@ -40,7 +40,10 @@ class AppUser extends CoreModel
 
     public static function findAll()
     {
-
+        $pdo = Database::getPDO();
+        $sql = 'SELECT * FROM `app_user`';
+        $pdoStatement = $pdo->query($sql);
+        return $pdoStatement->fetchAll(PDO::FETCH_CLASS, self::class);
     }
 
     public static function find($id)
@@ -58,9 +61,68 @@ class AppUser extends CoreModel
 
     }
 
+    /**
+     * Méthode permettant d'ajouter un enregistrement dans la table app_user.
+     * L'objet courant doit contenir toutes les données à ajouter : 1 propriété => 1 colonne dans la table
+     * 
+     * @return bool
+     */
     public function insert()
     {
+        // Récupération de l'objet PDO représentant la connexion à la DB
+        $pdo = Database::getPDO();
 
+        // Ecriture de la requête INSERT INTO
+        $sql = "
+            INSERT INTO `app_user` (
+                firstname,
+                lastname,
+                email,
+                password,
+                role,
+                status
+            )
+            VALUES (
+                :firstname,
+                :lastname,
+                :email,
+                :password,
+                :role,
+                :status
+            )
+        ";
+
+        // Préparation de la requête d'insertion (+ sécurisé que exec directement)
+        // @see https://www.php.net/manual/fr/pdo.prepared-statements.php
+        //
+        // Permet de lutter contre les injections SQL
+        // @see https://portswigger.net/web-security/sql-injection (exemples avec SELECT)
+        // @see https://stackoverflow.com/questions/681583/sql-injection-on-insert (exemples avec INSERT INTO)
+        $query = $pdo->prepare($sql);
+
+        // Execution de la requête d'insertion
+        // On peut envoyer les données « brutes » à execute() qui va les "sanitize" pour SQL.
+        $query->execute([
+            ':firstname' => $this->firstname,
+            ':lastname' => $this->lastname,
+            ':email' => $this->email,
+            ':password' => $this->password,
+            ':role' => $this->role,
+            ':status' => $this->status
+        ]);
+
+        // Si au moins une ligne ajoutée
+        if ($query->rowCount() > 0) {
+            // Alors on récupère l'id auto-incrémenté généré par MySQL
+            $this->id = $pdo->lastInsertId();
+
+            // On retourne VRAI car l'ajout a parfaitement fonctionné
+            return true;
+            // => l'interpréteur PHP sort de cette fonction car on a retourné une donnée
+        }
+        
+        // Si on arrive ici, c'est que quelque chose n'a pas bien fonctionné => FAUX
+        return false;
     }
 
     /**

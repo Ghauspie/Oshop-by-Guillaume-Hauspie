@@ -27,7 +27,9 @@ class CategoryController extends CoreController {
         // On les envoie à la vue
         $this->show(
             'category/list',
-            ['categories' => $categories]
+            ['categories' => $categories,
+            'tokenCSRF' => $this->generateTokenCSRF()
+            ]
         );
     }
 
@@ -259,4 +261,50 @@ class CategoryController extends CoreController {
             echo 'La catégorie n\'existe pas';
         }
     }
+
+    public function listorder()
+    {
+        $this->show('order/order');
+    }
+
+    public function updateorder()
+    {
+       
+        $reset=New category;
+        $reset=$reset->reset();
+        
+            // 1. On récupère la catégorie concernée dans la BDD => on récupère un objet
+            // 2. On alimente cet objet avec les données mises à jour
+            // 3. On met à jour dans la BDD
+            foreach ($_POST['emplacement'] as $home_order => $categoryId) {
+                // On récupère la catégorie courante (dans la BDD)
+                $home_order+=1;
+                dump($home_order, $categoryId);
+                $Order = Category::find($categoryId);
+                //dump($Order);
+                //die;
+                // On met à jour les propriétés de l'instance.
+                $Order->getId($categoryId);
+                $Order->setHomeOrder($home_order);
+                dump($Order);
+                // on met a jours les données sur la BDD
+                $ok = $Order->updateorder();
+                
+                
+                }
+                if ($ok) {
+                    // Si la sauvegarde a fonctionné, on redirige vers la liste des catégories.
+                   echo 'sauvegarde done';
+                   header('Location: /category/list');
+                    
+                }
+                else {
+                    // Sinon, on ajoute un message d'erreur à la page actuelle, et on laisse
+                    // l'utilisateur retenter la création.
+                    echo 'La sauvegarde a échoué';
+                }
+           
+            
+    }
+    
 }

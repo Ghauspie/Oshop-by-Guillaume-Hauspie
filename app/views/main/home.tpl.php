@@ -40,7 +40,7 @@
                             <?php endforeach; ?>
                             </tbody>
                         </table>
-                        <a href="categories.html" class="btn btn-block btn-success">Voir plus</a>
+                        <a href="<?=$router->generate('category-list') ?>" class="btn btn-block btn-success">Voir plus</a>
                     </div>
                 </div>
             </div>
@@ -81,7 +81,7 @@
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
-                        <a href="products.html" class="btn btn-block btn-success">Voir plus</a>
+                        <a href="<?=$router->generate('product-list') ?>" class="btn btn-block btn-success">Voir plus</a>
                     </div>
                 </div>
             </div>

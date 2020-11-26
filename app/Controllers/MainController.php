@@ -16,7 +16,9 @@ class MainController extends CoreController {
     {
 
         // On vérifie que l'utilisateur connecté a le droit d'accéder à cette page (il doit être admin ou catalog-manager)
-        CoreController::checkAuthorization(['admin', 'catalog-manager']);
+        //CoreController::checkAuthorization(['admin', 'catalog-manager']);
+        //désormais on utilise via le corecontroller
+        
 
         // On récupère les catégories de la home
         // $categoryModel = new Category();
